@@ -1,0 +1,43 @@
+{extends file="template.html"}
+
+{block name="barra-css"}no-navbar.css{/block}
+{block name="css"}<link href="css/index.css" rel="stylesheet">{/block}
+
+{block name="barra"}{/block}
+
+{block name="code"}
+
+<div id="login-block">
+
+    <h1 id="titulo">ValID</h1>
+
+    <div class="form-block">
+
+        <form class="form text-center">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control formulario" id="login">
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control formulario" id="password">
+            </div>
+        </form>
+  
+    </div>
+    
+    <div class="link">
+            <a href="#">Esqueci minha senha</a>
+        </div>
+
+        <div class="link">
+            <a href="solicitacao.php">Solicitar acesso</a>
+        </div>
+
+    <div id="button">
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </div>
+
+</div>
+
+{/block}

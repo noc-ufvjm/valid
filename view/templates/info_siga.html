@@ -1,0 +1,62 @@
+{extends file="template.html"}
+
+{block name="barra-css"}no-navbar.css{/block}
+{block name="css"}<link href="css/info_siga.css" rel="stylesheet">{/block}
+
+{block name="code"}
+
+<div id="login-block">
+
+    <h1 id="titulo">Dados</h1>
+
+    <div class="form-block">
+
+        <form id="movieForm" method="post">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="control-label">Movie title</label>
+                        <input type="text" class="form-control" name="title" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <label class="control-label">Director</label>
+                        <input type="text" class="form-control" name="director" />
+                    </div>
+
+                    <div class="col-xs-4">
+                        <label class="control-label">Writer</label>
+                        <input type="text" class="form-control" name="writer" />
+                    </div>
+
+                    <div class="col-xs-4">
+                        <label class="control-label">Producer</label>
+                        <input type="text" class="form-control" name="producer" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label class="control-label">Website</label>
+                        <input type="text" class="form-control" name="website" />
+                    </div>
+
+                    <div class="col-xs-6">
+                        <label class="control-label">Youtube trailer</label>
+                        <input type="text" class="form-control" name="trailer" />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+{/block}

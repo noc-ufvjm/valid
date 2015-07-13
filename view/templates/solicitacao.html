@@ -1,0 +1,41 @@
+{extends file="template.html"}
+
+{block name="barra-css"}no-navbar.css{/block}
+{block name="css"}<link href="css/solicitacao.css" rel="stylesheet">{/block}
+
+{block name="barra"}{/block}
+
+{block name="code"}
+
+<div id="login-block">
+
+    <h1 id="titulo">Acesso</h1>
+
+    <div class="texto">
+        <p>(Texto)</p>
+    </div>
+    
+    <div class="form-block">
+
+        <form class="form text-center">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control formulario" id="nome">
+            </div>
+            <div class="form-group">
+                <label for="mail">E-mail</label>
+                <input type="text" class="form-control formulario" id="mail">
+            </div>
+        </form>
+
+    </div>
+
+    
+
+    <div id="button">
+        <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+    </div>
+
+</div>
+
+{/block}

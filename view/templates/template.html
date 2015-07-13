@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>V a l I D</title>
+
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/{block name="barra-css"}navbar.css{/block}" rel="stylesheet">
+        {block name="css"}{/block}
+    </head>
+
+    <body>
+
+        {block name="barra"}{include file="barra.html"}{/block}
+        
+        <div id="conteudo" class="container">
+
+        {block name="code"}{/block}
+        
+        </div>
+
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        {block name="js"}{/block}
+    </body>
+</html>
