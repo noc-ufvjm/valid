@@ -4,10 +4,10 @@
     $s = new Smarty;
     
     //Diretório de templates
-    $s->addTemplateDir("templates");
+    $s->addTemplateDir("../view/templates");
     
     //Diretório de templates compilados
-    $s->setCompileDir("com_templates");
+    $s->setCompileDir("../view/com_templates");
 
     //Display de página que utiliza template "template"
     $s->display('info_siga.html');
