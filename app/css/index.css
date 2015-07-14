@@ -69,3 +69,9 @@ div.link {
     text-align: center;
     margin-bottom: 10px;
 }
+
+div.alert {
+    margin: auto;
+    margin-top: 50px;
+    width: 308px;
+}

@@ -23,6 +23,8 @@
                 <input type="password" class="form-control formulario" id="password" name="password">
             </div>
 
+
+
             <div class="link">
                 <a href="#">Esqueci minha senha</a>
             </div>
@@ -35,8 +37,13 @@
                 <button type="submit" class="btn btn-primary">Entrar</button>
             </div>
         </form>
-
     </div>
+
+    {if $erro}
+    <div class="alert alert-danger">
+        <p align="center">Favor verificar nome de usuário e/ou senha!</p>
+    </div>
+    {/if}
 </div>
 
 {/block}
