@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__file__) . './../conf/Config.php');
+require_once(dirname(__file__) . '/Usuario.php');
 
 class Siga {
 

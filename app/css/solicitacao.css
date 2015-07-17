@@ -51,11 +51,11 @@ div.form-block {
     width: 80%;
 }
 
-input#nome {
+input#cpf {
     width: 50%;
 }
 
-input#mail {
+input#senha {
     width: 50%;
 }
 

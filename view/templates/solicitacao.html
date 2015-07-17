@@ -12,30 +12,31 @@
     <h1 id="titulo">Acesso</h1>
 
     <div class="texto">
-        <p>(Texto)</p>
+        <p>Entre com seu CPF e senha do SIGA</p>
     </div>
     
     <div class="form-block">
 
-        <form class="form text-center">
+        <form class="form text-center" method="post">
             <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" class="form-control formulario" id="nome">
+                <label for="nome">CPF</label>
+                <input type="text" class="form-control formulario" id="cpf" name="cpf">
             </div>
             <div class="form-group">
-                <label for="mail">E-mail</label>
-                <input type="text" class="form-control formulario" id="mail">
+                <label for="mail">Senha</label>
+                <input type="password" class="form-control formulario" id="senha" name="senha">
             </div>
+	    <div id="button">
+              <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+	    </div>
         </form>
-
     </div>
 
-    
-
-    <div id="button">
-        <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+    {if $erro}
+    <div class="alert alert-danger">
+      <p align="center">Favor verificar CPF e/ou senha!</p>
     </div>
-
+    {/if}
 </div>
 
 {/block}
