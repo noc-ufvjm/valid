@@ -51,14 +51,21 @@ class Siga {
         $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf)); // filtra digitos
         $this->conectar();
         $sql = "select u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'";
+
         $result = pg_exec($this->sigaconn, $sql);
-        $obj = pg_fetch_object($result);
-        if (md5($senha) == $obj->senha) {
-                    return TRUE;
-                } else {
-                    error_log("Não foi possível autenticar.");
-                    return FALSE;
-                }
+        $array = pg_fetch_all($result);
+        foreach($array as $values){
+            if (md5($senha) == $values['senha']) {
+                $result = TRUE;
+            } else {
+                error_log("Não foi possível autenticar.");
+                $result = FALSE;
+            }
+            if ($result){
+                return TRUE;
+            }
+        }
+        return FALSE;
     }
 
     public function check_telefone($telefone) {
