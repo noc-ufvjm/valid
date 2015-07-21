@@ -55,19 +55,43 @@
                             <label class="control-label" for="celular">Celular</label>
                             <input type="text" class="form-control" name="celular" id="celular" value="{$usuario->telefones[1]}"/>
                         </div>
+                    </div>
+                </div>
 
-			<div class="col-xs-4">
-                            <label class="control-label" for="senha">Senha</label>
-                            <input type="text" class="form-control" name="senha" id="senha" value="{$usuario->telefones[1]}"/>
-						</div>
+                <hr/>
 
-			<div class="col-xs-4">
-                            <label class="control-label" for="celular">Confirmar Senha</label>
-                            <input type="text" class="form-control" name="celular" id="celular" value="{$usuario->telefones[1]}"/>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label class="control-label" for="nome">Login</label>
+                            <input type="text" class="form-control" name="nome" id="nome" value=""/>
                         </div>
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label class="control-label" for="senha">Senha</label>
+                            <input type="password" class="form-control" name="senha" id="senha" value=""/>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <label class="control-label" for="celular">Confirmar Senha</label>
+                            <input type="password" class="form-control" name="celular" id="celular" value=""/>
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
