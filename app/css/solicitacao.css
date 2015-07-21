@@ -47,7 +47,7 @@ label {
 div.form-block {
     margin: auto;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     width: 80%;
 }
 
@@ -56,10 +56,6 @@ input#cpf {
 }
 
 input#senha {
-    width: 50%;
-}
-
-input#cpf {
     width: 50%;
 }
 
@@ -73,4 +69,9 @@ div.texto {
     text-align: center;
     margin-top: 20px;
     color: #b2c2e4;
+}
+
+div.alert {
+    margin: auto;
+    width: 40%;
 }
