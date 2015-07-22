@@ -31,14 +31,3 @@
         unset($_SESSION);
         $s->display('index.html');
     }
-    if ($_POST['cpf'] != null && $_POST['senha'] != null) {
-        $ldap = new Siga();
-        if ($ldap->autenticacao($_POST['cpf'], $_POST['senha'])) {
-            error_log("usuario com " . $_POST['cpf'] . " autenticado");
-            $_SESSION['cpf'] = $_POST['cpf'];
-            header("location:info_siga.php");
-        } else {
-            $s->assign('erro_solicitacao', true);
-            $s->display('index.html');
-        }
-    }
