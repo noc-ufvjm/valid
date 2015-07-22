@@ -3,6 +3,11 @@
     require_once dirname(__file__).'/../model/Siga.php';    
 
     session_start();
+    if (!array_key_exists('cpf', $_SESSION))
+    {
+        header('location: index.php');
+        exit;
+    }
 
     $s = new Smarty;
 
