@@ -1,5 +1,5 @@
 function autenticacao(e) {
-    $.post("/new-valid/app/getsiga.php",
+    $.post("/valid/app/getsiga.php",
 	   {
 	       cpf: $('#cpf').val(),
 	       senha: $('#senha').val()
