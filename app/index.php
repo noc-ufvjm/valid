@@ -1,6 +1,7 @@
 <?php
     require_once 'smarty3/Smarty.class.php';
     require_once dirname(__file__).'/../model/Ldap.php';
+    require_once dirname(__file__).'/../model/Siga.php';
 
     session_start();
         
@@ -15,7 +16,6 @@
     //Criação de variável
     //$s->assign('titulo', 'Bem Vindo!');
 
-//    if (!array_key_exists('login', $_SESSION) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['login'] != null && $_POST['password'] != null) {
         $ldap = new Ldap();
         if ($ldap->autenticacao($_POST['login'], $_POST['password'])) {
@@ -29,6 +29,16 @@
     } else {
         echo 'sem valores para comparar';
         unset($_SESSION);
-        //var_dump($_SESSION);
         $s->display('index.html');
+    }
+    if ($_POST['cpf'] != null && $_POST['senha'] != null) {
+        $ldap = new Siga();
+        if ($ldap->autenticacao($_POST['cpf'], $_POST['senha'])) {
+            error_log("usuario com " . $_POST['cpf'] . " autenticado");
+            $_SESSION['cpf'] = $_POST['cpf'];
+            header("location:info_siga.php");
+        } else {
+            $s->assign('erro_solicitacao', true);
+            $s->display('index.html');
+        }
     }

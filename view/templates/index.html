@@ -2,7 +2,7 @@
 
 {block name="barra-css"}no-navbar.css{/block}
 {block name="css"}<link href="css/index.css" rel="stylesheet">{/block}
-
+{block name="js"}<script src="js/solicitacao.js"></script>{/block}
 {block name="barra"}{/block}
 
 {block name="code"}
@@ -57,7 +57,7 @@
 
                         <div class="form-block">
 
-                            <form class="form text-center" method="post">
+                            <form id="form_solicitacao" name="form_solicitacao" class="form text-center" method="post">
                                 <div class="form-group">
                                     <label for="nome">CPF</label>
                                     <input type="text" class="form-control formulario" id="cpf" name="cpf">
@@ -67,17 +67,13 @@
                                     <input type="password" class="form-control formulario" id="senha" name="senha">
                                 </div>
                                 <div id="button">
-                                    <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+                                    <button type="submit" id="solicitar" name="solicitar" class="btn btn-primary">Enviar Solicitação</button>
                                 </div>
                             </form>
                         </div>
-
-                        {if $erro}
-                        <div class="alert alert-danger">
+                        <div id="msg_error" name="msg_error" class="alert alert-danger">
                             <p align="center">Favor verificar CPF e/ou senha!</p>
                         </div>
-                        {/if}
-
                     </div>
                 </div>
             </div>

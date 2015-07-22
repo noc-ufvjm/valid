@@ -10,7 +10,6 @@
     $s->addTemplateDir("../view/templates");
     //Diretório de templates compilados
     $s->setCompileDir("../view/com_templates");
-
     //Display de página que utiliza template "template"
     if (array_key_exists('cpf', $_SESSION)) {
         $siga = new Siga;

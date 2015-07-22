@@ -58,7 +58,7 @@ class Siga {
             if (md5($senha) == $values['senha']) {
                 $result = TRUE;
             } else {
-                error_log("Não foi possível autenticar.");
+                error_log("Nao foi possivel autenticar.");
                 $result = FALSE;
             }
             if ($result){
