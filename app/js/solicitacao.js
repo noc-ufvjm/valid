@@ -6,10 +6,14 @@ function autenticacao(e) {
 	   },
 	   function(data, status){
 	if (status === 'success') {
-	    if (data == 'false') {
-		$("#msg_error").show("slow");
-	    } else {
+	    if (data == 'true'){
 		$("#form_solicitacao").submit();
+	    }else if (data == 'Already exists'){
+		$("#msg_error p").text("Usuário já possui cadastro no LDAP!");
+		$("#msg_error").show("slow");
+	    }else{
+		$("#msg_error p").text("Favor verificar CPF e/ou senha!");
+		$("#msg_error").show("slow");
 	    }
 	} else {
 	    console.log('error conection');
