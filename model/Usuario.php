@@ -32,6 +32,7 @@ class Usuario {
             "nome" => "cn",
             "sobrenome" => "sn",
             "mail" => "mail",
+            "mail_alternativo" => "mailAlternateAddress",
             "apelido" => "givenName",
             "matricula" => "employeeNumber",
             "foto" => "jpegPhoto",

@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__file__) . '/../conf/Config.php');
+require_once(dirname(__file__) . '/Usuario.php');
 
 class Ldap {
 
@@ -111,6 +112,9 @@ class Ldap {
             $info["userPassword"] = "{MD5}" . base64_encode(md5($info["userPassword"], TRUE));
             $dn = "uid=" . $info["uid"] . Config::get('baseMail');
             $info['objectclass'] = array("inetOrgPerson", "brPerson");
+            if (array_key_exists('mailAlternateAddress', $info)){
+                array_push($info['objectclass'], 'qmailUser');
+            }
             $comparacao = array_diff($obrigatorio, array_keys($info));
             if (count($comparacao) > 0){//verificar se os valores obrigatorios estao todos preenchidos
                 $msg = "Os seguintes campos são obrigatórios: ";

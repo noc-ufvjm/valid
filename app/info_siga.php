@@ -24,22 +24,32 @@
     }
     if (array_key_exists('login', $_POST) && $_POST['senha'] != "" && $_POST['check_senha'] != ""){
         if ($_POST['senha'] == $_POST['check_senha']){
-            unset($_POST['check_senha']);
             $ldap = new Ldap;
-            $usuarioLdap = new Usuario;
+
+            $obj = (object) $_POST;
+
+            if ($obj->telefone) $obj->telefones[] = Siga::check_telefone($obj->telefone);
+            if ($obj->celular) $obj->telefones[] = Siga::check_telefone($obj->celular);
+            $obj->mail_alternativo = $obj->mail;
+            $obj->mail = $obj->login . '@ufvjm.edu.br';
+
+            unset($obj->check_senha);
+            unset($obj->telefone);
+            unset($obj->celular);
 
             //Dados provisorios
-            $usuarioLdap->sobrenome = "teste";
-            $usuarioLdap->apelido = "teste";
+            $obj->sobrenome = "teste";
+            $obj->apelido = "teste";
 
-            foreach ($_POST as $key => $value){
-                $usuarioLdap->$key = $value;
-            }
+            $usuarioLdap = new Usuario;
+            $usuarioLdap->setUsuario($obj);
+
             if ($ldap->gravar($usuarioLdap)){
-                echo "passou";
+                header('location: logout.php');
             }
         }else{
-            $s->assign('error', true);
+            $s->display('info_siga.html');
         }
+    }else{
+        $s->display('info_siga.html');
     }
-    $s->display('info_siga.html');
