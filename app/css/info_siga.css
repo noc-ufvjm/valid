@@ -62,3 +62,12 @@ label {
     color: #b2c2e4;
 }
 
+.ok {
+    border: solid 1px green;
+    border-radius: 4px;
+}
+
+.error {
+    border: solid 1px red;
+    border-radius: 4px;
+}
