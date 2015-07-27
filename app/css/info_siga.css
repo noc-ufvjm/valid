@@ -6,7 +6,7 @@ div#login-block {
     
     width: 50%;
     min-height: 200px;
-    max-height: 570px;
+    max-height: 640px;
     
     background: white;
     
@@ -35,10 +35,10 @@ div h1{
 }
 
 img#user {
-    height: 150px;
-    width: 150px;
-    margin-top: 30px;
-    margin-right: 20px;    
+    height: 80px;
+    width: 80px; 
+    margin: auto;
+    margin-bottom: 15px;
     box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
     border-radius: 150px;
     -webkit-border-radius: 150px;
@@ -54,7 +54,7 @@ div.form-block {
     vertical-align: top;
     margin: auto;
     margin-top: 30px;
-    width: 60%;
+    width: 80%;
 }
 
 label {
