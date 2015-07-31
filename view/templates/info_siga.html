@@ -3,6 +3,28 @@
 {block name="barra-css"}navbar.css{/block}
 {block name="css"}<link href="css/info_siga.css" rel="stylesheet">{/block}
 {block name="js"}<script src="js/info_siga.js"></script>{/block}
+
+{block name="barra"}
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Valid</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="index.php">Index</a></li>
+                {if $adm}<li><a href="solicitacoes.php">Solicitações</a></li>{/if}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/valid/app/logout.php" id="sair" name="sair">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{/block}
+
+
 {block name="code"}
 
 <div id="login-block">
@@ -13,14 +35,14 @@
 
         <div class="form-block">
 
-            <form id="movieForm" method="post" enctype="multipart/form-data">
+            <form id="movieForm" method="post">
 
                 <div class="col-xs-3">
                     <img id="user" src="imagens/user.png"/>
 
-                    <label class="col-xs-12 btn btn-primary" for="foto">
-                        <input id="foto" name="foto" type="file" style="display:none;">
-                        <span class="glyphicon glyphicon-plus"></span> <span class="glyphicon glyphicon-camera"></span> Imagem
+                    <label class="col-xs-12 btn btn-primary" for="my-file-selector">
+                        <input id="my-file-selector" type="file" style="display:none;" accept="image/*">
+                        <span class="glyphicon glyphicon-plus"></span> <span class="glyphicon glyphicon-camera"></span>
                     </label>
                 </div>
 
@@ -45,7 +67,7 @@
                         <div class="row">
                             <div class="col-xs-5">
                                 <label class="control-label" for="apelido">Apelido</label>
-                                <input type="text" class="form-control" name="apelido" id="apelido" value="{$usuario->apelido}"/>
+                                <input type="text" class="form-control" name="apelido" id="apelido" value="{$usuario->sobrenome}"/>
                             </div>
 
                             <div class="col-xs-3">
@@ -111,7 +133,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-xs-12 text-right">
-                                <button type="submit" class="btn btn-primary">Confirmar</button>
+                                <button type="submit" class="btn btn-primary" >Confirmar</button>
                             </div>
                         </div>
                     </div>

@@ -57,8 +57,10 @@ $(document).ready(function () {
 
             var input = $(this)[0];
             var file = input.files[0];
+            
+            console.log(file.type);
 
-            if (file.type === "image/jpeg") {
+            if (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/gif") {
 
                 var reader = new FileReader();
                 reader.onload = function (e) {
@@ -66,7 +68,7 @@ $(document).ready(function () {
                 }
                 reader.readAsDataURL(file);
             } else {
-                alert("NAPPA!!");
+                alert("\nPor favor, utilize apenas imagens nos seguintes formatos: jpg, gif ou png");
             }
         });
     });
