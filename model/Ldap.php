@@ -98,11 +98,10 @@ class Ldap {
         }
     }
 
-    public function gravar($usuario) {
+    public function gravar($usuario, $dn) {
         $obrigatorio = array("uid", "cn", "sn", "mail", "employeeNumber", "brPersonCPF", "userPassword");
         $this->conectar();
         $attr = $usuario->mapLdap();
-        //var_dump($usuario);exit;
         if ($this->getLdapbind()) {
             foreach ($attr as $key => $value) {//passa o objeto $usuario para um array mapeado para o padrao LDAP
                 if ($usuario->$key != NULL) {
@@ -110,7 +109,8 @@ class Ldap {
                 }
             }
             $info["userPassword"] = "{MD5}" . base64_encode(md5($info["userPassword"], TRUE));
-            $dn = "uid=" . $info["uid"] . Config::get('baseMail');
+//            $dn = "uid=" . $info["uid"] . Config::get('baseMail');
+            $dn = "uid=" . $info["uid"] . $dn;
             $info['objectclass'] = array("inetOrgPerson", "brPerson");
             if (array_key_exists('mailAlternateAddress', $info)){
                 array_push($info['objectclass'], 'qmailUser');
@@ -124,7 +124,6 @@ class Ldap {
                 error_log($msg);
                 return false;
             }
-            //var_dump($info);exit;
             if (ldap_add($this->getLdapconn(), $dn, $info)) {
                 return true;
             } else {

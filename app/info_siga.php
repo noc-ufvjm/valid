@@ -37,14 +37,10 @@
             unset($obj->telefone);
             unset($obj->celular);
 
-            //Dados provisorios
-            $obj->sobrenome = "teste";
-            $obj->apelido = "teste";
-
             $usuarioLdap = new Usuario;
             $usuarioLdap->setUsuario($obj);
 
-            if ($ldap->gravar($usuarioLdap)){
+            if ($ldap->gravar($usuarioLdap, Config::get('baseSolicitacoes'))){
                 header('location: logout.php');
             }
         }else{
