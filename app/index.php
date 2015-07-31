@@ -19,7 +19,6 @@
     if ($_POST['login'] != null && $_POST['password'] != null) {
         $ldap = new Ldap();
         if ($ldap->autenticacao($_POST['login'], $_POST['password'])) {
-            echo 'usuario autenticado';
             $_SESSION['login'] = $_POST['login'];
             $s->display('info_siga.html');
         } else {
@@ -27,7 +26,6 @@
             $s->display('index.html');
         }
     } else {
-        echo 'sem valores para comparar';
         unset($_SESSION);
         $s->display('index.html');
     }
