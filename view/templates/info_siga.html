@@ -13,13 +13,13 @@
 
         <div class="form-block">
 
-            <form id="movieForm" method="post">
+            <form id="movieForm" method="post" enctype="multipart/form-data">
 
                 <div class="col-xs-3">
                     <img id="user" src="imagens/user.png"/>
 
-                    <label class="col-xs-12 btn btn-primary" for="my-file-selector">
-                        <input id="my-file-selector" type="file" style="display:none;">
+                    <label class="col-xs-12 btn btn-primary" for="foto">
+                        <input id="foto" name="foto" type="file" style="display:none;">
                         <span class="glyphicon glyphicon-plus"></span> <span class="glyphicon glyphicon-camera"></span> Imagem
                     </label>
                 </div>
@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <label class="control-label" for="apelido">Apelido</label>
-                                <input type="text" class="form-control" name="apelido" id="apelido" value="{$usuario->sobrenome}"/>
+                                <input type="text" class="form-control" name="apelido" id="apelido" value="{$usuario->apelido}"/>
                             </div>
 
                             <div class="col-xs-6">
