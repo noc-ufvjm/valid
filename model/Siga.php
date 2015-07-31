@@ -32,9 +32,10 @@ class Siga {
         $obj = pg_fetch_object($result);
         
         $obj->nome = $this->formata_nome($obj->nome);
-        $aux = explode(" ", $obj->nome, 2);
-        $obj->apelido = $aux[0];
-        $obj->sobrenome = $aux[1];
+        $aux = explode(" ", $obj->nome);
+        $obj->apelido = $aux[0] . " " . $aux[1];
+        unset($aux[0]);
+        $obj->sobrenome = implode(" ", $aux);
         $obj->cpf = $cpf;
         $obj->telefones = array();
         if ($obj->telefone) $obj->telefones[] = $this->check_telefone($obj->telefone);
