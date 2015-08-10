@@ -1,0 +1,88 @@
+div#login-block {
+    position: absolute;
+    
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+    
+    width: 60%;
+    min-height: 200px;
+    max-height: 340px;
+    
+    background: white;
+    
+    opacity: 0.8;
+
+    box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
+    -moz-box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
+    
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+}
+
+div h1{
+    margin: 0px;
+    padding: 0px;
+    padding-left: 20px;
+    letter-spacing: 0.4em;
+    border-bottom: solid 1px #e4e8f4;
+    line-height: 60px;
+    left: 25px;
+    color: #b2c2e4;
+    font-family: monospace;
+    font-size: 30px;
+}
+
+div.form-block {
+    display: inline-block;
+    vertical-align: top;
+    margin: auto;
+    margin-top: 20px;
+    width: 85%;
+}
+
+img#user {
+    height: 160px;
+    width: 160px; 
+    margin: 10px 0px 0px 0px;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+}
+
+h6 {
+    margin: 0px 0px 0px 0px;
+    color: #b2c2e4;
+    font-weight: bolder;
+    font-size: 14px;
+    text-align: left;
+}
+
+p {
+    margin: 0px 0px 0px 5px;
+    text-align: left;
+}
+
+p#nome-usuario {
+    margin: 0px 0px 13px 13px;
+    font-size: 32px;
+    padding-bottom: 5px;
+    border-bottom: solid 1px #e4e8f4;
+}
+
+.dados-usuario {
+    font-size: 17px;
+    margin: 0px 0px 0px 5px;
+}
+
+.kevin-s-1 {
+    font-size: 19px;
+    margin: 1px 0px 8px 5px;
+}
+
+.kevin-s-2 {
+    font-size: 17px;
+    margin: 1px 0px 15px 5px;
+}
