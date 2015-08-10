@@ -4,9 +4,10 @@
     require_once dirname(__file__).'/../model/Ldap.php';
 
     session_start();
+
     if (!array_key_exists('cpf', $_SESSION))
     {
-        header('location: index.php');
+        header('Location: index.php');
         exit;
     }
 

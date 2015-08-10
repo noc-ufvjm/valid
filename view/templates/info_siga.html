@@ -1,19 +1,19 @@
 {extends file="template.html"}
 
 {block name="barra-css"}navbar.css{/block}
-{block name="css"}<link href="css/info_siga.css" rel="stylesheet">{/block}
-{block name="js"}<script src="js/info_siga.js"></script>{/block}
+{block name="css"}<link href="css/card.css" rel="stylesheet">{/block}
+{block name="js"}<script src="js/card.js"></script>{/block}
 
 {block name="barra"}
-
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Valid</a>
+            <a class="navbar-brand" href="#" id="valid">ValID</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="index.php">Index</a></li>
+
                 {if $adm}<li><a href="solicitacoes.php">Solicitações</a></li>{/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -23,7 +23,6 @@
     </div>
 </nav>
 {/block}
-
 
 {block name="code"}
 
@@ -35,7 +34,7 @@
 
         <div class="form-block">
 
-            <form id="movieForm" method="post">
+            <form id="formulario" method="post">
 
                 <div class="col-xs-3">
                     <img id="user" src="imagens/user.png"/>
@@ -142,5 +141,7 @@
         </div>
     </div>
 </div>
+
+
 
 {/block}
