@@ -8,5 +8,12 @@ html, body {
 }
 
 .navbar {
-  margin-bottom: 20px;
+    background: #fcfcfc;
+    margin-bottom: 20px;
+}
+
+a#valid {
+    font-family: monospace;
+    letter-spacing: 0.4em;
+    color: #b2c2e4;
 }
