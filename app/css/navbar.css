@@ -16,4 +16,13 @@ a#valid {
     font-family: monospace;
     letter-spacing: 0.4em;
     color: #b2c2e4;
+    background-image: url('../imagens/logo_ufvjm.png');
+    background-size: 32px 25px;
+    background-repeat: no-repeat;
+    background-position-y: 12px;
+    padding-left: 43px;
+}
+
+a#valid span{
+    color: #b8dc76;
 }

@@ -33,6 +33,17 @@ h1{
     color: #b2c2e4;
     font-family: monospace;
     font-size: 30px;
+
+    background-image: url('../imagens/logo_ufvjm.png');
+    background-size: 40px 33px;
+    background-repeat: no-repeat;
+    background-position-y: 12px;
+    margin-left: 15px;
+    padding-left: 55px;
+}
+
+h1 span{
+    color: #b8dc76;
 }
 
 h4{
