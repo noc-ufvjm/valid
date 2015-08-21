@@ -26,3 +26,25 @@ a#valid {
 a#valid span{
     color: #b8dc76;
 }
+
+a#link-gerenciar {
+    margin-right: -15px;
+}
+
+a img#gerenciar {
+    width: 28px;
+    height: 28px;
+    
+    margin-top: -5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+
+}
+
+a#sair{
+    color: #525252;
+}
