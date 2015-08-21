@@ -1,0 +1,117 @@
+div#login-block {
+    position: absolute;
+    
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+    
+    min-width: 800px;
+    max-width: 70%;
+    min-height: 300px;
+    max-height: 410px;
+
+    background: white;
+
+    opacity: 0.8;
+    box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
+    -moz-box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
+    
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+}
+
+div h1{
+    margin: 0px;
+    padding: 0px;
+    padding-left: 20px;
+    letter-spacing: 0.4em;
+    border-bottom: solid 1px #e4e8f4;
+    line-height: 60px;
+    left: 25px;
+    color: #b2c2e4;
+    font-family: monospace;
+    font-size: 30px;
+}
+
+p#foto {
+    font-weight: bold;
+    color: #b2c2e4;
+}
+
+img#user {
+    height: 120px;
+    width: 120px; 
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 23px;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
+}
+
+div.dados {
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 50%;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+}
+
+div#separator{
+    border-left: 1px solid #e4e8f4;
+    float: left;
+    height: 349px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+div.senha {
+    float: left;
+    margin-top: 20px;
+    width: 41%;
+    
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+}
+
+div#imagem {
+    position: absolute;
+}
+
+div.form-block {
+    display: inline-block;
+    vertical-align: top;
+    margin: auto;
+    margin-top: 30px;
+}
+
+label {
+    float: left;
+    color: #b2c2e4;
+}
+
+.ok {
+    border: solid 1px green;
+    border-radius: 4px;
+}
+
+.error {
+    border: solid 1px red;
+    border-radius: 4px;
+}
+
+#bot1 {
+    
+}
+
+button#submit1 {
+    margin-top: 20px
+}
+
+button#submit2 {
+    margin-top: 94px;
+}
+
+

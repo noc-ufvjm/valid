@@ -1,52 +1,42 @@
-<?php 
-    require_once 'smarty3/Smarty.class.php';
-    require_once dirname(__file__).'/../model/Siga.php';
-    require_once dirname(__file__).'/../model/Ldap.php';
+<?php
 
-    session_start();
+require_once 'smarty3/Smarty.class.php';
+require_once dirname(__file__) . '/../model/Siga.php';
+require_once dirname(__file__) . '/../model/Ldap.php';
 
-    if (!array_key_exists('login', $_SESSION))
-    {
-        header('Location: index.php');
-        exit;
-    }
+session_start();
 
-    $s = new Smarty;
+//Se a variável login não existir na sessão, não deixar passar do index
+if (!array_key_exists('login', $_SESSION)) {
+    header('Location: index.php');
+    exit;
+}
 
-    //Diretório de templates
-    $s->addTemplateDir("../view/templates");
-    //Diretório de templates compilados
-    $s->setCompileDir("../view/com_templates");
-    //Display de página que utiliza template "template"
-    if (array_key_exists('login', $_SESSION)) {
-        $ldap = new Ldap;
-        $usuario = $ldap->getUsuario($_SESSION['login']);
-        $s->assign('usuario', $usuario);
-    }
-    if (array_key_exists('login', $_POST) && $_POST['senha'] != "" && $_POST['check_senha'] != ""){
-        if ($_POST['senha'] == $_POST['check_senha']){
-            $ldap = new Ldap;
+$s = new Smarty;
 
-            $obj = (object) $_POST;
+//Diretório de templates
+$s->addTemplateDir("../view/templates");
 
-            if ($obj->telefone) $obj->telefones[] = Siga::check_telefone($obj->telefone);
-            if ($obj->celular) $obj->telefones[] = Siga::check_telefone($obj->celular);
-            $obj->mail_alternativo = $obj->mail;
-            $obj->mail = $obj->login . '@ufvjm.edu.br';
+//Diretório de templates compilados
+$s->setCompileDir("../view/com_templates");
 
-            unset($obj->check_senha);
-            unset($obj->telefone);
-            unset($obj->celular);
+//Display de página que utiliza template "template"
+$ldap = new Ldap;
+$usuario = $ldap->getUsuario($_SESSION['login']);
 
-            $usuarioLdap = new Usuario;
-            $usuarioLdap->setUsuario($obj);
+//Verifica se o usuário possui foto
+if ($usuario->foto) {
+    //Se existir, baixar a foto para a pasta do site e associar valor verdadeiro à variável foto, usada no html da "home"
+    file_put_contents("imagens/" . $usuario->login . ".jpg", $usuario->foto);
+    
+    //Este valor é utilizado num if. Se o usuário tiver foto, carregar a foto dele. Se não, carregar a imagem padrão
+    $s->assign('foto', true);
+} else {
+    $s->assign('foto', false);
+}
 
-            if ($ldap->gravar($usuarioLdap, Config::get('baseSolicitacoes'))){
-                header('location: logout.php');
-            }
-        }else{
-            $s->display('info_siga.html');
-        }
-    }else{
-        $s->display('info_siga.html');
-    }
+//Associa à variável usuário, um objeto recheado de valores para serem utilizados no html da home
+$s->assign('usuario', $usuario);
+
+//Mostra a página home
+$s->display('alterar_dados.html');
