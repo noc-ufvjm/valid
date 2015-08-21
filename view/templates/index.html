@@ -7,27 +7,22 @@
 {block name="barra"}{/block}
 
 {block name="code"}
-
 <div id="login-block">
-
     <h1 id="titulo">Val<span>ID</span></h1>
-
     <div class="form-block">
-
+        <!-- Form de login no Valid -->
         <form class="form text-center" method="post">
             <div class="form-group">
                 <label for="login">Login</label>
-                <input type="text" class="form-control formulario" id="login" name="login">
+                <input type="text" class="form-control" id="login" name="login">
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" class="form-control formulario" id="password" name="password">
+                <input type="password" class="form-control" id="password" name="password">
             </div>
-
             <div class="link">
                 <a href="#">Esqueci minha senha</a>
             </div>
-
             <div class="row">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#solicita-acesso" data-whatever="@getbootstrap">Solicitar Acesso</button>
                 <button type="submit" class="btn btn-primary">Entrar</button>
@@ -49,36 +44,30 @@
                     <h4 class="modal-title" id="exampleModalLabel">Solicitação de Acesso</h4>
                 </div>
                 <div class="modal-body">
-
                     <div class="texto">
                         <p>Entre com seu CPF e senha do SIGA</p>
                     </div>
-
-                    <div class="form-block">
-
+                    <!-- Form de Solicitação de Acesso -->
+                    <form id="form_solicitacao" name="form_solicitacao" action="info_siga.php" class="form text-center" method="post">
                         <div class="form-block">
-
-                            <form id="form_solicitacao" name="form_solicitacao" action="info_siga.php" class="form text-center" method="post">
-                                <div class="form-group">
-                                    <label for="nome">CPF</label>
-                                    <input type="text" class="form-control formulario" id="cpf" name="cpf">
-                                </div>
-                                <div class="form-group">
-                                    <label for="mail">Senha</label>
-                                    <input type="password" class="form-control formulario" id="senha" name="senha">
-                                </div>
-                                <div id="button">
-                                    <button type="submit" id="solicitar" name="solicitar" class="btn btn-primary">Enviar Solicitação</button>
-                                </div>
-                            </form>
+                            <div class="form-group">
+                                <label for="nome">CPF</label>
+                                <input type="text" class="form-control" id="cpf" name="cpf">
+                            </div>
+                            <div class="form-group">
+                                <label for="mail">Senha</label>
+                                <input type="password" class="form-control" id="senha" name="senha">
+                            </div>
+                            <div id="button">
+                                <button type="submit" id="solicitar" name="solicitar" class="btn btn-primary">Enviar Solicitação</button>
+                            </div>
+                            <div id="msg_error" name="msg_error" class="alert alert-danger">
+                                <p align="center"></p>
+                            </div>
                         </div>
-                        <div id="msg_error" name="msg_error" class="alert alert-danger">
-                            <p align="center"></p>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    {/block}
+{/block}

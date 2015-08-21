@@ -72,6 +72,10 @@ div.form-block {
     width: 80%;
 }
 
+div#msg_error {
+    margin-top: 20px;
+}
+
 input#login {
     width: 50%;
 }
