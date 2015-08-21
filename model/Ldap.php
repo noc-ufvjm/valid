@@ -101,9 +101,10 @@ class Ldap {
     public function gravar($usuario, $dn) {
         $obrigatorio = array("uid", "cn", "sn", "mail", "employeeNumber", "brPersonCPF", "userPassword");
         $this->conectar();
+        // Pegar o array mapLdap[] na class Usuario
         $attr = $usuario->mapLdap();
         if ($this->getLdapbind()) {
-            foreach ($attr as $key => $value) {//passa o objeto $usuario para um array mapeado para o padrao LDAP
+            foreach ($attr as $key => $value) {//passa o objeto $usuario para um array mapeado para o padrao LDAP              
                 if ($usuario->$key != NULL) {
                     $info[$value] = $usuario->$key;
                 }

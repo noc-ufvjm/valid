@@ -41,5 +41,4 @@ class Usuario {
             "senha" => "userPassword"
         );
     }
-
 }
