@@ -5,41 +5,33 @@
 {block name="js"}{/block}
 
 {block name="code"}
-
 <div id="login-block">
-
-    <h1 id="titulo">Dados</h1>
-
+    <h1 id="titulo">Perfil</h1>
     <div class="marrow text-center">
-
         <div class="form-block">
-
             <div class="row">
-
                 <div class="col-xs-3 fundo-imagem">
+                    
                     {if $foto}
                     <img id="user" src="imagens/{$usuario->login}.jpg"/>
                     {else}
                     <img id="user" src="imagens/user.png"/>
                     {/if}
+                    
                 </div>
-
                 <div class="col-xs-9">
                     <div class="row">
                         <div>
                             <p id="nome-usuario">{$usuario->nome}<p/>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-xs-6">
                             <h6>Apelido</h6>
-                            <p class="dados-usuario kevin-s-1">{$usuario->sobrenome}<p/>
+                            <p class="dados-usuario kevin-s-1">{$usuario->apelido}<p/>
                             <h6>E-mail</h6>
                             <p class="dados-usuario kevin-s-2">{$usuario->mail}<p/>
-
                         </div>
-
                         <div class="col-xs-6">
                             <h6>Login</h6>
                             <p class="dados-usuario kevin-s-1">{$usuario->login}<p/>
@@ -52,42 +44,30 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
-                
                 <div class="col-xs-3"></div>
-
                 <div class="col-xs-9">
                     <div class="row">
-
                         <div class="col-xs-3">
                             <h6>CPF</h6>
                             <p>{$usuario->cpf}<p/>
                         </div>
-
                         <div class="col-xs-3">
                             <h6>Matrícula</h6>
                             <p>{$usuario->matricula}<p/>
                         </div>
-
                         <div class="col-xs-3">
                             <h6>Telefone 1</h6>
                             <p>{$usuario->telefones[0]}<p/>
                         </div>
-
                         <div class="col-xs-3">
                             <h6>Telefone 2</h6>
                             <p>{$usuario->telefones[1]}<p/>
                         </div>
-
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-
 {/block}
