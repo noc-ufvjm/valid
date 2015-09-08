@@ -15,7 +15,7 @@ $senha = $_REQUEST['senha'];
 $siga = new Siga();
 
 //Se o usuário existir no siga, verificar se o usuário já existe no ldap
-if ($siga->autenticacao($cpf, $_REQUEST['senha'])) {
+if ($siga->autenticacao($cpf, $senha)) {
     
     $ldap = new Ldap;
     
