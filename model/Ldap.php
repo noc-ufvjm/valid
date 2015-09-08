@@ -113,11 +113,11 @@ class Ldap {
 //            $dn = "uid=" . $info["uid"] . Config::get('baseMail');
             $dn = "uid=" . $info["uid"] . $dn;
             $info['objectclass'] = array("inetOrgPerson", "brPerson");
-            if (array_key_exists('mailAlternateAddress', $info)){
+            if (array_key_exists('mailAlternateAddress', $info)) {
                 array_push($info['objectclass'], 'qmailUser');
             }
             $comparacao = array_diff($obrigatorio, array_keys($info));
-            if (count($comparacao) > 0){//verificar se os valores obrigatorios estao todos preenchidos
+            if (count($comparacao) > 0) {//verificar se os valores obrigatorios estao todos preenchidos
                 $msg = "Os seguintes campos são obrigatórios: ";
                 foreach ($comparacao as $value) {
                     $msg .= "[" . $value . "] ";
@@ -142,5 +142,4 @@ class Ldap {
     public function getLdapconn() {
         return $this->ldapconn;
     }
-
 }
