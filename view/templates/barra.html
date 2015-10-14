@@ -9,7 +9,7 @@
                 {if $adm}<li><a href="solicitacoes.php">Solicitações</a></li>{/if}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="alterar_dados.php" id='link-gerenciar'><span id="id-usuario">{$usuario->login}</span><img src="../app/imagens/{if $foto}{$usuario->login}.jpg{else}user.png{/if}"  id="gerenciar"/></a></li>
+                <li><a href="alterar_dados.php" id='link-gerenciar'><span id="id-usuario">{$usuario->uid}</span><img src="../app/imagens/{if $foto}{$usuario->uid}.jpg{else}user.png{/if}"  id="gerenciar"/></a></li>
                 <li><a href="/valid/app/logout.php" id="sair" name="sair">Sair</a></li>
             </ul>
         </div>

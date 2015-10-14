@@ -5,7 +5,7 @@
 
     session_start();
 
-    if (!array_key_exists('login', $_SESSION))
+    if (!array_key_exists('cpf', $_SESSION))
     {
         header('Location: index.php');
         exit;
@@ -29,8 +29,6 @@
         //O vetor de informações é vinculado à variável usuário do smarty
         $s->assign('usuario', $usuario);
     }
-    
-    
     
     //Ao se clicar no botão confirmar, é verificado se o login, senha e confirmação de senha foram digitados
     if (array_key_exists('login', $_POST) && $_POST['senha'] != "" && $_POST['check_senha'] != ""){
@@ -59,6 +57,7 @@
             
             // Povoa a variavel $value da classe Usuario com o $obj
             $usuarioLdap->setUsuario($obj);
+            
             // Chama a função gravar da classe Ldap e passa o objeto usuario e DN
             if ($ldap->gravar($usuarioLdap, Config::get('baseSolicitacoes'))){
                 header('location: logout.php');

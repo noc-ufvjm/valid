@@ -21,12 +21,13 @@ $s->setCompileDir("../view/com_templates");
 
 //Display de página que utiliza template "template"
 $ldap = new Ldap;
+
 $usuario = $ldap->getUsuario($_SESSION['login']);
 
 //Verifica se o usuário possui foto
-if ($usuario->foto) {
+if ($usuario->jpegPhoto) {
     //Se existir, baixar a foto para a pasta do site e associar valor verdadeiro à variável foto, usada no html da "home"
-    file_put_contents("imagens/" . $usuario->login . ".jpg", $usuario->foto);
+    file_put_contents("imagens/" . $usuario->uid . ".jpg", $usuario->jpegPhoto);
     
     //Este valor é utilizado num if. Se o usuário tiver foto, carregar a foto dele. Se não, carregar a imagem padrão
     $s->assign('foto', true);

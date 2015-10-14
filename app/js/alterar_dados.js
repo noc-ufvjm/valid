@@ -28,38 +28,50 @@ function verifica_senha(obj) {
         }
         else {
             $('#senha_atual').removeClass('error ok');
+            $("#erro_senha").hide("slow");
             obj.atual = false;
         }
     });
 }
 
-//Verifica se algum dos campos dos dados foi preenchido
-function verifica_campos_dados(campo, dados_iniciais, dado) {
+//Verifica se a senha digitada pelo usuário é a atual
+function alterar_senha(obj) {
+    //Envia os dados para serem processados pela api verificarSenha.php
+    $.post("/valid/app/alterarSenha.php", {
+        login: $('#id-usuario').text(),
+        senha_atual: $('#senha_atual').val(),
+        senha_nova: $('#nova_senha').val()
+    }, function (data, status) {
 
-    if (campo.val() === "" && dados_iniciais !== "") {
-        campo.removeClass("warning").addClass("error");
-        set_obj(dado, false);
+    });
+}
+
+function verifica_dados(atual, dados_iniciais) {
+
+    if (atual.val() === "" && dados_iniciais !== "") {
+        atual.removeClass("warning").addClass("error");
+        set_obj(atual, false);
     } else {
-        if (campo.val() !== dados_iniciais) {
-            campo.addClass("warning").removeClass("error");
-            set_obj(dado, true);
+        if (atual.val() !== dados_iniciais) {
+            atual.addClass("warning").removeClass("error");
+            set_obj(atual, true);
         }
-        else if (campo.val() === dados_iniciais) {
-            campo.removeClass("warning").removeClass("error");
-            set_obj(dado, false);
+        else if (atual.val() === dados_iniciais) {
+            atual.removeClass("warning").removeClass("error");
+            set_obj(atual, false);
         }
     }
 }
 
-function set_obj(dado, valor) {
+function set_obj(atual, valor) {
 
-    if (dado === 1)
+    if (atual.attr('id') === "apelido")
         dados.apelido = valor;
-    else if (dado === 2)
+    else if (atual.attr('id') === "email_alternativo")
         dados.email_alternativo = valor;
-    else if (dado === 3)
+    else if (atual.attr('id') === "telefone1")
         dados.telefone1 = valor;
-    else
+    else if (atual.attr('id') === "telefone2")
         dados.telefone2 = valor;
 }
 
@@ -76,7 +88,7 @@ function verifica_campos_senha() {
         } else {
             $('#nova_senha').addClass('error').removeClass('ok');
             $('#confirmar_nova_senha').addClass('error').removeClass('ok');
-            $("#erro_senha p").text("Digite corretamente sua nova senha!");
+            $("#erro_senha p").text("Digite corretamente sua nova senha!").addClass('alert').addClass('alert-danger');
             $("#erro_senha").show("slow");
             senha.nova = false;
         }
@@ -93,12 +105,12 @@ function verifica_campos_senha() {
 //Altera os dados do usuário
 function altera_dados(e) {
     if (dados.apelido || dados.email_alternativo || dados.telefone1 || dados.telefone2) {
-        console.log("ALTERAR DADOS - CRIAR FUNÇÃO NO LDAP");
+        $("#erro_dados p").text("BELEZA!!").addClass('alert').addClass('alert-danger');
+        $("#erro_dados").show("slow");
         e.preventDefault();
     }
     else {
-        $("#erro_dados p").text("ERRO!!");
-        $("#erro_dados").show("slow");
+        $("#erro_dados").hide("slow");
         e.preventDefault();
     }
 }
@@ -106,111 +118,54 @@ function altera_dados(e) {
 //Altera a senha do usuário
 function altera_senha(e) {
 
-    //Se existir valor no campo senha atual
-    if ($('#senha_atual').val()) {
+    if ($('#senha_atual').val() || $('#nova_senha').val() || $('#confirmar_nova_senha').val()) {
 
-        //Se a senha atual estiver correta
-        if (senha.atual) {
+        //Se existir valor no campo senha atual
+        if ($('#senha_atual').val()) {
 
-        
+            //Se a senha atual estiver correta
+            if (senha.atual) {
+                if ($('#nova_senha').val() === "" || $('#confirmar_nova_senha').val() === "") {
+                    $("#erro_senha p").text("Entre com sua senha atual!").addClass('alert').addClass('alert-danger');
+                    $("#erro_senha").show("slow");
+                    e.preventDefault();
+                }
 
+                if (!senha.nova) {
+                    $('#nova_senha').addClass('error').removeClass('ok');
+                    $('#confirmar_nova_senha').addClass('error').removeClass('ok');
+                    $("#erro_senha p").text("Entre com sua nova senha!").addClass('alert').addClass('alert-danger');
+                    $("#erro_senha").show("slow");
+                }
+                else {
+                    $("#erro_senha p").text("GOOD TO GO!").addClass('alert').addClass('alert-danger');
+                    //altera_senha($('#nova_senha').val());
+                    $("#erro_senha").show("slow");
+                }
+
+                e.preventDefault();
+            }
+
+            //Se a senha atual não estiver correta
+            else {
+                $("#erro_senha p").text("Entre com sua senha atual correta!").addClass('alert').addClass('alert-danger');
+                $("#erro_senha").show("slow");
+                e.preventDefault();
+            }
         }
-        
-        //Se a senha atual não estiver correta
+
+        //Se não existir valor no campo senha atual
         else {
-            $("#erro_senha p").text("Entre com sua senha atual correta!");
+            $('#senha_atual').addClass('error').removeClass('ok');
+            $("#erro_senha p").text("Entre com sua senha atual!").addClass('alert').addClass('alert-danger');
             $("#erro_senha").show("slow");
             e.preventDefault();
         }
     }
-    
-    //Se não existir valor no campo senha atual
     else {
-        $("#erro_senha p").text("Entre com sua senha atual!");
-            $("#erro_senha").show("slow");
-            e.preventDefault();
+        e.preventDefault();
     }
 
-
-
-
-    /*
-     //Se senha atual estiver preenchida
-     if ($('#senha_atual').val()) {
-     
-     //Se os campos nova senha e confirmação de nova senha estiverem preenchidos
-     if ($('#nova_senha').val() && $('#confirmar_nova_senha').val()) {
-     
-     if (senha.atual && senha.nova) {
-     console.log("ALTERAR SENHA - CRIAR FUNÇÃO NO LDAP");
-     e.preventDefault();
-     }
-     else if (senha.atual && senha.nova === false) {
-     if ($('#senha_atual').val()) {
-     $("#erro_senha p").text("Digite corretamente sua nova senha!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     else {
-     $("#erro_senha p").text("Digite corretamente sua nova senha!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     }
-     else if (senha.atual === false && senha.nova) {
-     $("#erro_senha p").text("Entre com sua senha atual correta!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     }
-     
-     //Caso os campos de nova senha e confirmar senha não estejam preenchidos
-     else {
-     $("#erro_senha p").text("Digite sua nova senha!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     }
-     else {
-     $("#erro_senha p").text("Entre com sua senha atual!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     */
-
-
-
-
-
-
-
-
-    /*
-     if (senha.atual && senha.nova) {
-     console.log("ALTERAR SENHA - CRIAR FUNÇÃO NO LDAP");
-     e.preventDefault();
-     }
-     else if (senha.atual && senha.nova === false) {
-     
-     if ($('#senha_atual').val()) {
-     $("#erro_senha p").text("Digite corretamente sua nova senha!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     else {
-     $("#erro_senha p").text("Digite corretamente sua nova senha!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     }
-     else if (senha.atual === false && senha.nova) {
-     $("#erro_senha p").text("Entre com sua senha atual correta!");
-     $("#erro_senha").show("slow");
-     e.preventDefault();
-     }
-     else {
-     e.preventDefault();
-     }*/
 }
 
 //Ao se carregar a página por completo...
@@ -244,22 +199,22 @@ $(document).ready(function () {
 
     //Cada vez que se digitar uma letra no campo, enviar para verificação dos campos dos dados
     $('#apelido').keyup(function () {
-        verifica_campos_dados($('#apelido'), apelido, 1);
+        verifica_dados($('#apelido'), apelido);
     });
 
     //Cada vez que se digitar uma letra no campo, enviar para verificação dos campos dos dados
     $('#email_alternativo').keyup(function () {
-        verifica_campos_dados($('#email_alternativo'), email_alternativo, 2);
+        verifica_dados($('#email_alternativo'), email_alternativo);
     });
 
     //Cada vez que se digitar uma letra no campo, enviar para verificação dos campos dos dados
     $('#telefone1').keyup(function () {
-        verifica_campos_dados($('#telefone1'), telefone1, 3);
+        verifica_dados($('#telefone1'), telefone1);
     });
 
     //Cada vez que se digitar uma letra no campo, enviar para verificação dos campos dos dados
     $('#telefone2').keyup(function () {
-        verifica_campos_dados($('#telefone2'), telefone2, 4);
+        verifica_dados($('#telefone2'), telefone2);
     });
 
     //Verifica se a senha atual é realmente a senha do usuário

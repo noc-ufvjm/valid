@@ -1,5 +1,7 @@
 {extends file="template.html"}
 
+{block name="barra"}{include file="barra-info-siga.html"}{/block}
+
 {block name="barra-css"}navbar.css{/block}
 {block name="css"}<link href="css/card.css" rel="stylesheet">{/block}
 {block name="js"}<script src="js/card.js"></script>{/block}
@@ -8,7 +10,7 @@
 
 <div id="login-block">
 
-    <h1 id="titulo">Dados</h1>
+    <h1 id="titulo">Informações do SIGA</h1>
 
     <div class="marrow text-center">
 
@@ -86,21 +88,20 @@
 
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-4">
                                 <label class="control-label" for="login">Login</label>
                                 <input type="text" class="form-control" name="login" id="login" value=""/>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-6">
+                            
+                            <div class="col-xs-2">
+                            </div>
+                            
+                            <div class="col-xs-3">
                                 <label class="control-label" for="senha">Senha</label>
                                 <input type="password" class="form-control" name="senha" id="senha" value=""/>
                             </div>
 
-                            <div class="col-xs-6">
+                            <div class="col-xs-3">
                                 <label class="control-label" for="check_senha">Confirmar Senha</label>
                                 <input type="password" class="form-control" name="check_senha" id="check_senha" value=""/>
                             </div>
