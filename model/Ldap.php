@@ -5,117 +5,203 @@ require_once(dirname(__file__) . '/Usuario.php');
 
 class Ldap {
 
-    private $ldapbind;
-    private $ldapconn;
+    private $ldapbind, $ldap_connect;
 
+    //Carrega o arquivo config.json, onde constam informações úteis
     public function __construct() {
         Config::load();
     }
 
+    //Retorna o estado do bind do LDAP
+    public function getLdapbind() {
+        return $this->ldapbind;
+    }
+
+    //Retorna o estado da conexão ao LDAP
+    public function getLdapconn() {
+        return $this->ldap_connect;
+    }
+
+    //Realiza a conexão com o LDAP
     public function conectar() {
-        $this->ldapconn = ldap_connect(Config::get('hostLdap')) or die("Não foi possível conectar com o LDAP server.");
-        if ($this->ldapconn) {
-            ldap_set_option($this->ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
-            if (Config::get('startTlsLdap') == 'true') {
-                if (!ldap_start_tls($this->ldapconn)) {
-                    echo "start_tls fail";
-                    ldap_close($this->ldapconn); //fecha conexão com o LDAP
-                    return;
-                }
+
+        //Realiza conexão com o host
+        $this->ldap_connect = ldap_connect(Config::get('ldap_host')) or die("Não foi possível conectar com o LDAP server.");
+
+        //Se CONSEGUIR realizar conexão com o host
+        if ($this->ldap_connect) {
+
+            //Inicia TLS. Se não der certo, encerra conexão com LDAP
+            if (!ldap_start_tls($this->ldap_connect)) {
+
+                echo "Falha no start_tls";
+
+                //Fecha a conexão com o LDAP
+                ldap_close($this->ldap_connect);
+
+                return;
             }
 
-            $this->ldapbind = ldap_bind($this->ldapconn, Config::get('userLdap'), Config::get('passwdLdap'));
-        } else {
-            echo "Unable to connect to LDAP server";
+            //Seta Protocolo - Manter versão 3
+            ldap_set_option($this->ldap_connect, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+            //Realiza o bind do LDAP
+            $this->ldapbind = ldap_bind($this->ldap_connect, Config::get('ldap_user'), Config::get('ldap_password'));
+        }
+        //Se NÃO CONSEGUIR realizar conexão com o host, printa que não deu certo.
+        else {
+            echo "Impossível conectar-se com o servidor LDAP";
         }
     }
 
-    public function getUsuario($busca) {
-        $this->conectar();
-        $attr = array("uid", "cn", "sn", "givenName", "userPassword", "mail", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber");
+    //Realiza a autenticação no LDAP
+    public function autenticacao($login, $senha) {
 
+        //Realiza conexão com o LDAP
+        $this->conectar();
+
+        /* Verifica se o login está sendo ralizado com o cpf ou com o uid do usuário *
+         * O filtro é alterado de acordo com o tipo de login utilizado */
+        if (is_numeric($login)) {
+            $filter = "brPersonCPF=$login";
+        } else {
+            $filter = "uid=$login";
+        }
+
+        //Se o bind tiver sido um sucesso verifica se a senha digitada bate com a senha do LDAP
+        if ($this->getLdapbind()) {
+
+            //Pesquisa pela senha do usuário no LDAP
+            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("userPassword"));
+
+            //Recebe todas as entradas da pesquisa realizada
+            $info = ldap_get_entries($this->getLdapconn(), $sr);
+
+            //Se receber dados, verifica se a senha digitada (convertida para MD5) é a mesma que consta no LDAP (já em MD5)
+            if ($info['count'] != 0) {
+
+                //Retorna a primeira entrada
+                $info = ldap_first_entry($this->getLdapconn(), $sr);
+
+                //Recebe os atributos da pesquisa
+                $info = ldap_get_attributes($this->getLdapconn(), $info);
+
+                //Conversão da hash para que o 'MD5' sempre seja maiúsculo. O restante da hash permanece inalterado
+                $h_ldap = explode("}", $info['userPassword'][0]);
+                $hash_ldap = strtoupper($h_ldap[0]) . "}" . $h_ldap[1];
+
+                //Se a senha digitada (convertida para MD5) for igual a que já está no LDAP (Já em MD5), retorna TRUE
+                if ($hash_ldap == "{MD5}" . base64_encode(md5($senha, TRUE))) {
+                    return TRUE;
+
+                    //Se não for igual, retorna FALSE
+                } else {
+                    return FALSE;
+                }
+            }
+            //Se não, retorna FALSE e mostra mensagem de erro
+        } else {
+            error_log("Não foi possível estabelecer uma conexão com o LDAP");
+            return FALSE;
+        }
+    }
+
+    //Pesquisa e devolve os dados do usuário pesquisado
+    public function getUsuario($busca) {
+
+        //Realiza conexão com o LDAP
+        $this->conectar();
+
+        /* Verifica se o login está sendo ralizado com o cpf ou com o uid do usuário *
+         * O filtro é alterado de acordo com o tipo de login utilizado */
         if (is_numeric($busca)) {
             $filter = "brPersonCPF=$busca";
         } else {
             $filter = "uid=$busca";
         }
 
+        //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
         if ($this->getLdapbind()) {
-            $sr = ldap_search($this->getLdapconn(), Config::get('basedn'), $filter, $attr);
+
+            //Pesquisa pelos dados do usuário no LDAP
+            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
+
+            //Recebe todas as entradas da pesquisa realizada
             $info = ldap_get_entries($this->getLdapconn(), $sr);
+
+            //Se receber dados, COMPLETAR
             if ($info['count'] != 0) {
+
+                //Retorna a primeira entrada
                 $info = ldap_first_entry($this->getLdapconn(), $sr);
+
+                //Recebe os atributos da pesquisa
                 $info = ldap_get_attributes($this->getLdapconn(), $info);
 
+                //Cria um objeto com os valores recolhidos do usuário
                 $obj = (object) array();
-                $obj->login = @$info['uid'][0];
-                $obj->nome = @$info['cn'][0];
-                $obj->sobrenome = @$info['sn'][0];
-                $obj->apelido = @$info['givenName'][0];
-                $obj->senha = @$info['userPassword'][0];
-                $obj->mail = @$info['mail'][0];
-                $obj->cpf = @$info['brPersonCPF'][0];
-                $obj->matricula = @$info['employeeNumber'][0];
-                $obj->foto = @$info['jpegPhoto'][0];
-                $obj->telefones = @$info['telephoneNumber'];
-                unset($obj->telefones['count']);
 
+                //Preenche o objeto
+                $obj->uid = @$info['uid'][0];
+                $obj->cn = @$info['cn'][0];
+                $obj->sn = @$info['sn'][0];
+                $obj->givenName = @$info['givenName'][0];
+                $obj->userPassword = @$info['userPassword'][0];
+                $obj->mail = @$info['mail'][0];
+                $obj->brPersonCPF = @$info['brPersonCPF'][0];
+                $obj->employeeNumber = @$info['employeeNumber'][0];
+                $obj->jpegPhoto = @$info['jpegPhoto'][0];
+                $obj->telephoneNumber = @$info['telephoneNumber'];
+
+                //Elimina a contagem do vetor de telefones
+                unset($obj->telephoneNumber['count']);
+
+                //Cria-se uma instância de usuário
                 $usuario = new Usuario;
+
+                //Seta os valores de usuário com os valores recebidos da pesquisa e convertidos para objeto
                 $usuario->setUsuario($obj);
+
+                //Retorna o usuário
                 return $usuario;
+                //Se não receber os dados
             } else {
                 return FALSE;
             }
+            //Se não, retorna FALSE e mostra mensagem de erro
         } else {
             error_log("Não foi possível estabelecer uma conexão com o LDAP");
             return FALSE;
         }
     }
 
-    public function autenticacao($login, $senha) {
-        $this->conectar();
-        if (is_numeric($login)) {
-            $filter = "brPersonCPF=$login";
-        } else {
-            $filter = "uid=$login";
-        }
-        $attr = array("userPassword");
-        if ($this->getLdapbind()) {
-            $sr = ldap_search($this->getLdapconn(), Config::get('basedn'), $filter, $attr);
-            $info = ldap_get_entries($this->getLdapconn(), $sr);
-            if ($info['count'] != 0) {
-                $info = ldap_first_entry($this->getLdapconn(), $sr);
-                $info = ldap_get_attributes($this->getLdapconn(), $info);
-                if ("{md5}" . base64_encode(md5($senha, TRUE)) == $info['userPassword'][0]) {
-                    return TRUE;
-                } else {
-                    return FALSE;
-                }
-            }
-        } else {
-            error_log("Não foi possível estabelecer uma conexão com o LDAP");
-            return FALSE;
-        }
-    }
-
+    /*
     public function gravar($usuario, $dn) {
+
         $obrigatorio = array("uid", "cn", "sn", "mail", "employeeNumber", "brPersonCPF", "userPassword");
+
+        //Realiza conexão com o LDAP
         $this->conectar();
+
         // Pegar o array mapLdap[] na class Usuario
         $attr = $usuario->mapLdap();
+
         if ($this->getLdapbind()) {
-            foreach ($attr as $key => $value) {//passa o objeto $usuario para um array mapeado para o padrao LDAP              
+            
+            foreach ($attr as $key => $value) {//passa o objeto $usuario para um array mapeado para o padrao LDAP
                 if ($usuario->$key != NULL) {
                     $info[$value] = $usuario->$key;
                 }
             }
+            
             $info["userPassword"] = "{MD5}" . base64_encode(md5($info["userPassword"], TRUE));
-//            $dn = "uid=" . $info["uid"] . Config::get('baseMail');
+            //            $dn = "uid=" . $info["uid"] . Config::get('baseMail');
             $dn = "uid=" . $info["uid"] . $dn;
             $info['objectclass'] = array("inetOrgPerson", "brPerson");
             if (array_key_exists('mailAlternateAddress', $info)) {
                 array_push($info['objectclass'], 'qmailUser');
             }
+            
             $comparacao = array_diff($obrigatorio, array_keys($info));
             if (count($comparacao) > 0) {//verificar se os valores obrigatorios estao todos preenchidos
                 $msg = "Os seguintes campos são obrigatórios: ";
@@ -131,15 +217,7 @@ class Ldap {
                 echo ldap_error($this->getLdapconn()) . PHP_EOL;
                 return false;
             }
-            $con->close();
         }
-    }
+    }*/
 
-    public function getLdapbind() {
-        return $this->ldapbind;
-    }
-
-    public function getLdapconn() {
-        return $this->ldapconn;
-    }
 }

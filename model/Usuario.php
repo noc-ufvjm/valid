@@ -15,30 +15,4 @@ class Usuario {
     public function setUsuario($dados) {
         $this->values = $dados;
     }
-
-    public function mapSiga() {
-        return array(
-            "nome" => "nome",
-            "mail" => "email",
-            "telefones" => array("telefone", "celular"),
-            "matricula" => "login",
-            "senha" => "passmd5"
-        );
-    }
-
-    public function mapLdap() {
-        return array(
-            "login" => "uid",
-            "nome" => "cn",
-            "sobrenome" => "sn",
-            "mail" => "mail",
-            "mail_alternativo" => "mailAlternateAddress",
-            "apelido" => "givenName",
-            "matricula" => "employeeNumber",
-            "foto" => "jpegPhoto",
-            "telefones" => "telephoneNumber",
-            "cpf" => "brPersonCPF",
-            "senha" => "userPassword"
-        );
-    }
 }
