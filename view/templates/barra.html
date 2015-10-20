@@ -6,7 +6,8 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="home.php">Perfil</a></li>
-                {if $adm}<li><a href="solicitacoes.php">Solicitações</a></li>{/if}
+                <li><a href="index.php">Solicitações</a></li>
+                <li><a href="cadastrar-usuario.php">Cadastro</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="alterar_dados.php" id='link-gerenciar'><span id="id-usuario">{$usuario->uid}</span><img src="../app/imagens/{if $foto}{$usuario->uid}.jpg{else}user.png{/if}"  id="gerenciar"/></a></li>
