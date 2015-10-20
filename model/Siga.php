@@ -68,25 +68,26 @@ class Siga {
         $this->conectar();
 
         //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
-        $result = pg_exec($this->sigaconn, "select p.nome as nome, p.email as mail, p.telefone, p.celular, u.login as matricula, u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
+        $result = pg_exec($this->sigaconn, "select p.nome as cn, p.email as mailalternateaddress, p.telefone, p.celular, u.login as employeenumber, u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
         
         //Os dados pesquisados são recebidos por este objeto.
         $obj = pg_fetch_object($result);
 
-        //O nome do usuário é formatado
-        $obj->nome = $this->formata_nome($obj->nome);
+        //O nome completo do usuário é formatado
+        $obj->cn = $this->formata_nome($obj->cn);
         
         //Separação dos sobrenomes do primeiro nome
-        $aux = explode(" ", $obj->nome);
-        $obj->apelido = $aux[0] . " " . $aux[1];
+        $aux = explode(" ", $obj->cn);
+        $obj->cn = $aux[0];
+        $obj->givenName = $aux[0];
         
         //Eliminação do primeiro nome
         unset($aux[0]);
         
         //Junta os sobrenomes em apenas uma variável
-        $obj->sobrenome = implode(" ", $aux);
+        $obj->sn = implode(" ", $aux);
         
-        $obj->cpf = $cpf;
+        $obj->brPersonCPF = $cpf;
        
         //Os telefones são formatados
         $obj->telefones = array();
@@ -127,5 +128,4 @@ class Siga {
         $nome = str_replace($a1, $a2, $nome);
         return $nome;
     }
-
 }

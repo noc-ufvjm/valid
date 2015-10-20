@@ -174,50 +174,55 @@ class Ldap {
             return FALSE;
         }
     }
-
-    /*
-    public function gravar($usuario, $dn) {
-
-        $obrigatorio = array("uid", "cn", "sn", "mail", "employeeNumber", "brPersonCPF", "userPassword");
-
+    
+    public function existe($cpf) {
         //Realiza conexão com o LDAP
         $this->conectar();
 
-        // Pegar o array mapLdap[] na class Usuario
-        $attr = $usuario->mapLdap();
+        /* Verifica se o login está sendo ralizado com o cpf ou com o uid do usuário *
+         * O filtro é alterado de acordo com o tipo de login utilizado */
+        if (is_numeric($busca)) {
+            $filter = "brPersonCPF=$busca";
+        } else {
+            $filter = "uid=$busca";
+        }
 
+        //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
         if ($this->getLdapbind()) {
+
+            //Pesquisa pelos dados do usuário no LDAP
+            $sr = ldap_search($this->getLdapconn(), "ou=solicitacoes,dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF"));
             
-            foreach ($attr as $key => $value) {//passa o objeto $usuario para um array mapeado para o padrao LDAP
-                if ($usuario->$key != NULL) {
-                    $info[$value] = $usuario->$key;
-                }
-            }
-            
-            $info["userPassword"] = "{MD5}" . base64_encode(md5($info["userPassword"], TRUE));
-            //            $dn = "uid=" . $info["uid"] . Config::get('baseMail');
-            $dn = "uid=" . $info["uid"] . $dn;
-            $info['objectclass'] = array("inetOrgPerson", "brPerson");
-            if (array_key_exists('mailAlternateAddress', $info)) {
-                array_push($info['objectclass'], 'qmailUser');
-            }
-            
-            $comparacao = array_diff($obrigatorio, array_keys($info));
-            if (count($comparacao) > 0) {//verificar se os valores obrigatorios estao todos preenchidos
-                $msg = "Os seguintes campos são obrigatórios: ";
-                foreach ($comparacao as $value) {
-                    $msg .= "[" . $value . "] ";
-                }
-                error_log($msg);
-                return false;
-            }
-            if (ldap_add($this->getLdapconn(), $dn, $info)) {
+            if($sr) {
                 return true;
             } else {
-                echo ldap_error($this->getLdapconn()) . PHP_EOL;
                 return false;
             }
         }
-    }*/
+    }
 
+    public function cadastrar($vetor, $dn) {
+        //Realiza conexão com o LDAP
+        $this->conectar();
+
+        //Valores a inserir no cadastro
+        $values["cn"]= $vetor[0];
+        $values["sn"] = $vetor[1];
+        $values["employeeNumber"][0] = $vetor[2];
+        $values["brPersonCPF"][0] = $vetor[3];
+        $values["uid"] = $vetor[4];
+        $values["mail"] = $vetor[5];
+        $values["mailAlternateAddress"] = $vetor[5];
+        $values["telephoneNumber"][0] = $vetor[6];
+        $values["userPassword"] = md5("abcdefgh");
+        
+        $values["objectClass"][0] = "inetOrgPerson";
+        $values["objectClass"][1] = "brPerson";
+        $values["objectClass"][2] = "qmailUser";
+
+        //Função que adiciona ou altera usuário no ldap
+        $add = ldap_add($this->getLdapconn(), $dn, $values);
+        
+        return ldap_error ($this->getLdapconn());
+    }
 }

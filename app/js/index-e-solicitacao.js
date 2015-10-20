@@ -25,6 +25,15 @@ function autenticacao(e) {
                 $("#msg_error").show("slow");
                 
               //Erro no cpf ou na senha
+            } else if (data == 'Already in progress') {
+                
+                //Seta esta mensagem ao div
+                $("#msg_error p").text("Usuário já solicitou acesso ao ValID!");
+                
+                //Mostra a mensagem
+                $("#msg_error").show("slow");
+                
+              //Erro no cpf ou na senha
             } else {
                 $("#msg_error p").text("Favor verificar CPF e/ou senha!");
                 $("#msg_error").show("slow");

@@ -23,6 +23,9 @@ if ($siga->autenticacao($cpf, $senha)) {
     if ($ldap->getUsuario($cpf)){
         echo json_encode('Already exists');
         exit;
+    } else if($ldap->existe(cpf)) {
+        echo json_encode('Already in progress');
+        exit;
     }
     
     //Como o cpf existe no siga e não no ldap, disponibilizar o cpf na seção e setar dados como true
