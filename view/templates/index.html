@@ -2,7 +2,7 @@
 
 {block name="barra-css"}no-navbar.css{/block}
 {block name="css"}<link href="css/index.css" rel="stylesheet">{/block}
-{block name="js"}<script src="js/index-e-solicitacao.js"></script>{/block}
+{block name="js"}<script src="js/index.js"></script>{/block}
 
 {block name="barra"}{/block}
 
@@ -14,11 +14,11 @@
         <form class="form text-center" method="post">
             <div class="form-group">
                 <label for="login">Login</label>
-                <input type="text" class="form-control" id="login" name="login">
+                <input type="text" class="form-control text-center" id="login" name="login">
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" class="form-control text-center" id="password" name="password">
             </div>
             <div class="link">
                 <a href="#">Esqueci minha senha</a>
@@ -49,19 +49,19 @@
                     </div>
                     <!-- Form de Solicitação de Acesso -->
                     <form id="form_solicitacao" name="form_solicitacao" action="solicitar-acesso.php" class="form text-center" method="post">
-                        <div class="form-block">
+                        <div class="form-block-modal">
                             <div class="form-group">
                                 <label for="nome">CPF</label>
-                                <input type="text" class="form-control" id="cpf" name="cpf">
+                                <input type="text" class="form-control text-center" id="cpf" name="cpf" maxlength="11">
                             </div>
                             <div class="form-group">
                                 <label for="mail">Senha</label>
-                                <input type="password" class="form-control" id="senha" name="senha">
+                                <input type="password" class="form-control text-center" id="senha" name="senha">
                             </div>
                             <div id="button">
                                 <button type="submit" id="solicitar" name="solicitar" class="btn btn-primary">Enviar Solicitação</button>
                             </div>
-                            <div id="msg_error" name="msg_error" class="alert alert-danger">
+                            <div  id="msg_error">
                                 <p align="center"></p>
                             </div>
                         </div>

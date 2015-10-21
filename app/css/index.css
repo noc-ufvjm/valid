@@ -72,16 +72,21 @@ div.form-block {
     width: 80%;
 }
 
+div.form-block-modal {
+    margin: auto;
+    width: 80%;
+}
+
 div#msg_error {
     margin-top: 20px;
 }
 
 input#login {
-    width: 50%;
+    width: 48%;
 }
 
 input#password {
-    width: 50%;
+    width: 48%;
 }
 
 div.link {
@@ -89,22 +94,16 @@ div.link {
     margin-bottom: 10px;
 }
 
-div.alert {
-    margin: auto;
-    margin-top: 50px;
-    width: 308px;
-}
-
 button.btn {
     margin: 10px;
 }
 
 input#cpf {
-    width: 50%;
+    width: 48%;
 }
 
 input#senha {
-    width: 50%;
+    width: 48%;
 }
 
 div#button {
@@ -122,5 +121,6 @@ div.texto {
 
 div.alert {
     margin: auto;
+    margin-top: 30px;
     width: 70%;
 }
