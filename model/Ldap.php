@@ -89,9 +89,10 @@ class Ldap {
                 //Conversão da hash para que o 'MD5' sempre seja maiúsculo. O restante da hash permanece inalterado
                 $h_ldap = explode("}", $info['userPassword'][0]);
                 $hash_ldap = strtoupper($h_ldap[0]) . "}" . $h_ldap[1];
-
+                
                 //Se a senha digitada (convertida para MD5) for igual a que já está no LDAP (Já em MD5), retorna TRUE
                 if ($hash_ldap == "{MD5}" . base64_encode(md5($senha, TRUE))) {
+                    
                     return TRUE;
 
                     //Se não for igual, retorna FALSE
@@ -175,17 +176,11 @@ class Ldap {
         }
     }
     
-    public function existe($cpf) {
+    public function existeSolicitacao($cpf) {
         //Realiza conexão com o LDAP
         $this->conectar();
-
-        /* Verifica se o login está sendo ralizado com o cpf ou com o uid do usuário *
-         * O filtro é alterado de acordo com o tipo de login utilizado */
-        if (is_numeric($busca)) {
-            $filter = "brPersonCPF=$busca";
-        } else {
-            $filter = "uid=$busca";
-        }
+        
+        $filter = "brPersonCPF=$cpf";
 
         //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
         if ($this->getLdapbind()) {
@@ -193,11 +188,9 @@ class Ldap {
             //Pesquisa pelos dados do usuário no LDAP
             $sr = ldap_search($this->getLdapconn(), "ou=solicitacoes,dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF"));
             
-            if($sr) {
-                return true;
-            } else {
-                return false;
-            }
+            return ldap_count_entries($this->getLdapconn(), $sr);
+            
+            
         }
     }
 

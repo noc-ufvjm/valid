@@ -23,7 +23,7 @@ if ($siga->autenticacao($cpf, $senha)) {
     if ($ldap->getUsuario($cpf)){
         echo json_encode('Already exists');
         exit;
-    } else if($ldap->existe(cpf)) {
+    } else if($ldap->existeSolicitacao($cpf)) {
         echo json_encode('Already in progress');
         exit;
     }

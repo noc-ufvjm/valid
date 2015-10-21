@@ -32,6 +32,5 @@
         var_dump($usuario);
     }
     
-    
         $s->display('solicitar-acesso.html');
     
