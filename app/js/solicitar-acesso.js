@@ -3,7 +3,7 @@ var dados = false, login = false;
 
 //Verifica se o login existe
 function verificarLogin() {
-    $.get('/valid/app/verificarLogin.php?login=' + $('#uid').val(), function (data, status) {
+    $.get('/valid/app/api/verificarLogin.php?login=' + $('#uid').val(), function (data, status) {
         if ($('#uid').val() !== "") {
             if (status !== 'success') {
                 $('#uid').addClass('error').removeClass('ok');

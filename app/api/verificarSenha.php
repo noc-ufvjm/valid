@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__file__).'/../model/Ldap.php';
+require_once dirname(__file__).'/../../model/Ldap.php';
 
 session_start();
 

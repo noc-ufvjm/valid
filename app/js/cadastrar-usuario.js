@@ -3,7 +3,7 @@ var dados = false, login = false, cpf = false;
 
 //Verifica se o login existe
 function verificarLogin() {
-    $.get('/valid/app/verificarLogin.php?login=' + $('#uid').val(), function (data, status) {
+    $.get('/valid/app/api/verificarLogin.php?login=' + $('#uid').val(), function (data, status) {
         if ($('#uid').val() !== "") {
             if (status !== 'success') {
                 $('#uid').addClass('error').removeClass('ok');
@@ -33,7 +33,7 @@ function loginTrulse(trulse) {
 //Verifica se o CPF existe
 function verificarCPF() {
     if (($('#brPersonCPF').val()).length === 11) {
-        $.get('/valid/app/verificarLogin.php?login=' + $('#brPersonCPF').val(), function (data, status) {
+        $.get('/valid/app/api/verificarLogin.php?login=' + $('#brPersonCPF').val(), function (data, status) {
             if ($('#brPersonCPF').val() !== "") {
                 if (status !== 'success') {
                     $('#brPersonCPF').addClass('error').removeClass('ok');

@@ -7,7 +7,7 @@ var dados = {apelido: false, email_alternativo: false, telefone1: false, telefon
 //Verifica se a senha digitada pelo usuário é a atual
 function verifica_senha(obj) {
     //Envia os dados para serem processados pela api verificarSenha.php
-    $.post("/valid/app/verificarSenha.php", {
+    $.post("/valid/app/api/verificarSenha.php", {
         login: $('#id-usuario').text(),
         senha: $('#senha_atual').val()
     }, function (data, status) {
@@ -37,7 +37,7 @@ function verifica_senha(obj) {
 //Verifica se a senha digitada pelo usuário é a atual
 function alterar_senha(obj) {
     //Envia os dados para serem processados pela api verificarSenha.php
-    $.post("/valid/app/alterarSenha.php", {
+    $.post("/valid/app/api/alterarSenha.php", {
         login: $('#id-usuario').text(),
         senha_atual: $('#senha_atual').val(),
         senha_nova: $('#nova_senha').val()

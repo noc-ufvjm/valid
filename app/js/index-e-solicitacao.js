@@ -1,7 +1,7 @@
 function autenticacao(e) {
     
     //Envia os dados para serem processados pela api getsiga.php
-    $.post("/valid/app/getsiga.php", {
+    $.post("/valid/app/api/getSiga.php", {
         cpf: $('#cpf').val(),
         senha: $('#senha').val()
     }, function (data, status) {
