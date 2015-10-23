@@ -10,18 +10,18 @@ function autenticacao(e) {
         if (status === 'success') {
 
             //Existe no siga e não no ldap
-            if (data == 'true') {
+            if (data === 'true') {
 
                 //Executar o submit do form
                 $("#form_solicitacao").submit();
 
                 //Se o usuário já existir dentro do ldap, ele já possui acesso direto ao valid, então, mostra a mensagem
-            } else if (data == 'Already exists') {
+            } else if (data === 'Already exists') {
                 
                 mensagem("Usuário já possui acesso ao ValID!");
 
                 //Se o usuário já tiver realizado a solicitação de acesso
-            } else if (data == 'Already in progress') {
+            } else if (data === 'Already in progress') {
 
                 mensagem("Usuário já solicitou acesso ao ValID!");
 

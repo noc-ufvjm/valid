@@ -89,10 +89,10 @@ class Ldap {
                 //Conversão da hash para que o 'MD5' sempre seja maiúsculo. O restante da hash permanece inalterado
                 $h_ldap = explode("}", $info['userPassword'][0]);
                 $hash_ldap = strtoupper($h_ldap[0]) . "}" . $h_ldap[1];
-                
+
                 //Se a senha digitada (convertida para MD5) for igual a que já está no LDAP (Já em MD5), retorna TRUE
                 if ($hash_ldap == "{MD5}" . base64_encode(md5($senha, TRUE))) {
-                    
+
                     return TRUE;
 
                     //Se não for igual, retorna FALSE
@@ -125,7 +125,7 @@ class Ldap {
         if ($this->getLdapbind()) {
 
             //Pesquisa pelos dados do usuário no LDAP
-            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
+            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "mailAlternateAddress", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
 
             //Recebe todas as entradas da pesquisa realizada
             $info = ldap_get_entries($this->getLdapconn(), $sr);
@@ -149,6 +149,7 @@ class Ldap {
                 $obj->givenName = @$info['givenName'][0];
                 $obj->userPassword = @$info['userPassword'][0];
                 $obj->mail = @$info['mail'][0];
+                $obj->mailAlternateAddress = @$info['mailAlternateAddress'][0];
                 $obj->brPersonCPF = @$info['brPersonCPF'][0];
                 $obj->employeeNumber = @$info['employeeNumber'][0];
                 $obj->jpegPhoto = @$info['jpegPhoto'][0];
@@ -175,11 +176,11 @@ class Ldap {
             return FALSE;
         }
     }
-    
+
     public function existeSolicitacao($cpf) {
         //Realiza conexão com o LDAP
         $this->conectar();
-        
+
         $filter = "brPersonCPF=$cpf";
 
         //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
@@ -187,10 +188,8 @@ class Ldap {
 
             //Pesquisa pelos dados do usuário no LDAP
             $sr = ldap_search($this->getLdapconn(), "ou=solicitacoes,dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF"));
-            
+
             return ldap_count_entries($this->getLdapconn(), $sr);
-            
-            
         }
     }
 
@@ -199,7 +198,7 @@ class Ldap {
         $this->conectar();
 
         //Valores a inserir no cadastro
-        $values["cn"]= $vetor[0];
+        $values["cn"] = $vetor[0];
         $values["sn"] = $vetor[1];
         $values["employeeNumber"][0] = $vetor[2];
         $values["brPersonCPF"][0] = $vetor[3];
@@ -207,15 +206,35 @@ class Ldap {
         $values["mail"] = $vetor[5];
         $values["mailAlternateAddress"] = $vetor[5];
         $values["telephoneNumber"][0] = $vetor[6];
-        $values["userPassword"] = md5("abcdefgh");
-        
+        $values["telephoneNumber"][0] = $vetor[7];
+        $values["userPassword"] = md5("123456");
+
         $values["objectClass"][0] = "inetOrgPerson";
         $values["objectClass"][1] = "brPerson";
         $values["objectClass"][2] = "qmailUser";
 
         //Função que adiciona ou altera usuário no ldap
         $add = ldap_add($this->getLdapconn(), $dn, $values);
-        
-        return ldap_error ($this->getLdapconn());
+
+        return ldap_error($this->getLdapconn());
     }
+
+    public function modificar($tipo, $dn, $valor) {
+        //Realiza conexão com o LDAP
+        $this->conectar();
+
+        if ($tipo === "apelido")
+            $value["givenName"] = $valor;
+        else if ($tipo === "email_alternativo")
+            $value["mailAlternateAddress"] = $valor;
+        else if ($tipo === "telefone") {
+            $value["telephoneNumber"] = $valor;
+        }
+
+        //Função que adiciona ou altera usuário no ldap
+        ldap_modify($this->getLdapconn(), $dn, $value);
+        
+        return ldap_error($this->getLdapconn());
+    }
+
 }
