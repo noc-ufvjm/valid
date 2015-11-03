@@ -20,7 +20,6 @@ function verifica_dados(atual, dados_iniciais) {
     }
 }
 
-//
 function dadosTrulse(atual, valor) {
     if (atual.attr('id') === "apelido")
         apelido_tf = valor;
@@ -43,15 +42,13 @@ function altera_dados(dado, tipo) {
         //Se o post tiver dado certo, verificar a resposta
         if (status === 'success') {
             if (data) {
-            mensagem("Dado(s) alterado(s) com sucesso!", "ok");
+                mensagem_dados("Dado(s) alterado(s) com sucesso!", "ok");
             }
         }
     });
 }
 
-
-
-//Mostra mensagem
+//Mostra mensagem de erro/confirmação de dados
 function mensagem_dados(texto, tipo) {
     if (tipo === "erro") {
         $("#erro_dados p").text(texto).addClass('alert-danger').addClass('alert');
@@ -66,20 +63,105 @@ function mensagem_dados(texto, tipo) {
     }
 }
 
-//Mostra mensagem
-function mensagem_senha(texto, tipo) {
-    if (tipo === "erro") {
-        $("#erro_dados p").text(texto).addClass('alert-danger').addClass('alert');
-        $("#erro_dados").show("slow");
-    }
-    else if (tipo === "ok") {
-        $("#erro_dados p").text(texto).addClass('alert-success').addClass('alert');
-        $("#erro_dados").show("slow");
+//------------------------------------------------------------------------------
+
+//Verifica se a senha digitada pelo usuário é a atual
+function verifica_senha() {
+    //Envia os dados para serem processados pela api verificarSenha.php
+    $.post("/valid/app/api/verificarSenha.php", {
+        login: $('#id-usuario').text(),
+        senha: $('#senha_atual').val()
+    }, function (data, status) {
+
+        //Se a conexão tiver sido feita com sucesso
+        if ($('#senha_atual').val() !== "") {
+            if (status === "success") {
+                if (data === "ok") {
+                    $('#senha_atual').addClass('ok').removeClass('error');
+                    $("#erro_senha").hide("slow");
+                    senhaATrulse(true);
+                }
+                else {
+                    $('#senha_atual').addClass('error').removeClass('ok');
+                    senhaATrulse(false);
+                }
+            }
+        }
+        else {
+            $('#senha_atual').removeClass('error ok');
+            $("#erro_senha").hide("slow");
+            senhaATrulse(false);
+        }
+    });
+}
+
+function senhaATrulse(trulse) {
+    senha_a = trulse;
+}
+
+//Verifica se os campos nova senha e confirmar senha coincidem. Caso concidam..............
+function verifica_campos_senha() {
+    if ($('#nova_senha').val() !== "" || $('#confirmar_nova_senha').val() !== "") {
+        if ($('#nova_senha').val() === $('#confirmar_nova_senha').val()) {
+            $('#nova_senha').addClass('ok').removeClass('error');
+            $('#confirmar_nova_senha').addClass('ok').removeClass('error');
+            $("#erro_senha p").text("");
+            $("#erro_senha").hide("slow");
+            senhaNTrulse(true);
+        } else {
+            $('#nova_senha').addClass('error').removeClass('ok');
+            $('#confirmar_nova_senha').addClass('error').removeClass('ok');
+            $("#erro_senha p").text("Digite corretamente sua nova senha!").addClass('alert').addClass('alert-danger');
+            $("#erro_senha").show("slow");
+            senhaNTrulse(false);
+        }
     }
     else {
-        $("#erro_dados").hide("slow");
+        $('#nova_senha').removeClass('ok error');
+        $('#confirmar_nova_senha').removeClass('ok error');
+        $("#erro_senha p").text("");
+        $("#erro_senha").hide("slow");
+        senhaNTrulse(false);
     }
 }
+
+function senhaNTrulse(trulse) {
+    senha_n = trulse;
+}
+
+//Altera os dados do usuário
+function altera_senha(dado, tipo) {
+    //Envia os dados para serem processados pela api getsiga.php
+    $.post("/valid/app/api/alterarDados.php", {
+        dado: dado,
+        tipo: tipo
+    }, function (data, status) {
+
+        //Se o post tiver dado certo, verificar a resposta
+        if (status === 'success') {
+            if (data) {
+                mensagem_senha("Dado(s) alterado(s) com sucesso!", "ok");
+            }
+        }
+    });
+}
+
+//Mostra mensagem de erro/confirmação de senha
+function mensagem_senha(texto, tipo) {
+    if (tipo === "erro") {
+        $("#erro_senha p").text(texto).removeClass('alert-success').addClass('alert-danger').addClass('alert');
+        $("#erro_senha").show("slow");
+    }
+    else if (tipo === "ok") {
+        $("#erro_senha p").text(texto).removeClass('alert-danger').addClass('alert-success').addClass('alert');
+        $("#erro_senha").show("slow");
+    }
+    else {
+        $("#erro_senha").hide("slow");
+    }
+}
+
+//------------------------------------------------------------------------------
 
 //Ao se carregar a página por completo...
 $(document).ready(function () {
@@ -157,12 +239,49 @@ $(document).ready(function () {
                 altera_dados([$("#telefone1").val(), $("#telefone2").val()], 2);
         }
         else {
-            console.log("Nenhum true");
         }
     });
 
     //Submit da senha
-    //$("#submit2").click(altera_senha);
+    $("#submit2").click(function () {
+        if ($('#senha_atual').val() || $('#nova_senha').val() || $('#confirmar_nova_senha').val()) {
+
+            //Se existir valor no campo senha atual
+            if ($('#senha_atual').val()) {
+                //Se a senha atual estiver correta
+                if (senha_a) {
+                    if ($('#nova_senha').val() === "" || $('#confirmar_nova_senha').val() === "") {
+                        $("#erro_senha p").text("Entre com sua senha atual!").addClass('alert').addClass('alert-danger');
+                        $("#erro_senha").show("slow");
+                    }
+                    if (!senha_n) {
+                        $('#nova_senha').addClass('error').removeClass('ok');
+                        $('#confirmar_nova_senha').addClass('error').removeClass('ok');
+                        $("#erro_senha p").text("Entre com sua nova senha!").addClass('alert').addClass('alert-danger');
+                        $("#erro_senha").show("slow");
+                    }
+                    else {
+                        altera_senha($("#nova_senha").val(), 3);
+                        $("div.alterar-senha").html('');
+                        $("div.alterar-senha").append('<p class="alert alert-success" id="senha_after">GRANDE NAPPA</p>');
+                    }
+                }
+
+                //Se a senha atual não estiver correta
+                else {
+                    $("#erro_senha p").text("Entre com sua senha atual correta!").addClass('alert').addClass('alert-danger');
+                    $("#erro_senha").show("slow");
+                }
+            }
+
+            //Se não existir valor no campo senha atual
+            else {
+                $('#senha_atual').addClass('error').removeClass('ok');
+                $("#erro_senha p").text("Entre com sua senha atual!").addClass('alert').addClass('alert-danger');
+                $("#erro_senha").show("slow");
+            }
+        }
+    });
 });
 //
 //
@@ -171,131 +290,20 @@ $(document).ready(function () {
 //
 //
 //
-/*//Verifica se a senha digitada pelo usuário é a atual
-function verifica_senha() {
-    //Envia os dados para serem processados pela api verificarSenha.php
-    $.post("/valid/app/api/verificarSenha.php", {
-        login: $('#id-usuario').text(),
-        senha: $('#senha_atual').val()
-    }, function (data, status) {
-
-        //Se a conexão tiver sido feita com sucesso
-        if ($('#senha_atual').val() !== "") {
-            if (status === "success") {
-                if (data === "ok") {
-                    $('#senha_atual').addClass('ok').removeClass('error');
-                    $("#erro_senha").hide("slow");
-                    senhaTrulse(true);
-                }
-                else {
-                    $('#senha_atual').addClass('error').removeClass('ok');
-                    senhaTrulse(false);
-                }
-            }
-        }
-        else {
-            $('#senha_atual').removeClass('error ok');
-            $("#erro_senha").hide("slow");
-            senhaTrulse(false);
-        }
-    });
-}
-
-function senhaTrulse(trulse) {
-    senha_a = trulse;
-}
-
-//Verifica se a senha digitada pelo usuário é a atual
-function alterar_senha(obj) {
-    //Envia os dados para serem processados pela api verificarSenha.php
-    $.post("/valid/app/api/alterarSenha.php", {
-        login: $('#id-usuario').text(),
-        senha_atual: $('#senha_atual').val(),
-        senha_nova: $('#nova_senha').val()
-    }, function (data, status) {
-
-    });
-}
-
-//Verifica se os campos nova senha e confirmar senha coincidem. Caso concidam..............
-function verifica_campos_senha() {
-
-    if ($('#nova_senha').val() !== "" || $('#confirmar_nova_senha').val() !== "") {
-        if ($('#nova_senha').val() === $('#confirmar_nova_senha').val()) {
-            $('#nova_senha').addClass('ok').removeClass('error');
-            $('#confirmar_nova_senha').addClass('ok').removeClass('error');
-            $("#erro_senha p").text("");
-            $("#erro_senha").hide("slow");
-            senhaTrulse(true);
-        } else {
-            $('#nova_senha').addClass('error').removeClass('ok');
-            $('#confirmar_nova_senha').addClass('error').removeClass('ok');
-            $("#erro_senha p").text("Digite corretamente sua nova senha!").addClass('alert').addClass('alert-danger');
-            $("#erro_senha").show("slow");
-            senhaTrulse(false);
-        }
-    }
-    else {
-        $('#nova_senha').removeClass('ok error');
-        $('#confirmar_nova_senha').removeClass('ok error');
-        $("#erro_senha p").text("");
-        $("#erro_senha").hide("slow");
-        senhaTrulse(false);
-    }
-}
-
-
-
-//Altera a senha do usuário
-function altera_senha(e) {
-
-    if ($('#senha_atual').val() || $('#nova_senha').val() || $('#confirmar_nova_senha').val()) {
-
-        //Se existir valor no campo senha atual
-        if ($('#senha_atual').val()) {
-
-            //Se a senha atual estiver correta
-            if (senha_a) {
-                if ($('#nova_senha').val() === "" || $('#confirmar_nova_senha').val() === "") {
-                    $("#erro_senha p").text("Entre com sua senha atual!").addClass('alert').addClass('alert-danger');
-                    $("#erro_senha").show("slow");
-                    e.preventDefault();
-                }
-
-                if (!senha_n) {
-                    $('#nova_senha').addClass('error').removeClass('ok');
-                    $('#confirmar_nova_senha').addClass('error').removeClass('ok');
-                    $("#erro_senha p").text("Entre com sua nova senha!").addClass('alert').addClass('alert-danger');
-                    $("#erro_senha").show("slow");
-                }
-                else {
-                    $("#erro_senha p").text("GOOD TO GO!").addClass('alert').addClass('alert-danger');
-                    //altera_senha($('#nova_senha').val());
-                    $("#erro_senha").show("slow");
-                }
-
-                e.preventDefault();
-            }
-
-            //Se a senha atual não estiver correta
-            else {
-                $("#erro_senha p").text("Entre com sua senha atual correta!").addClass('alert').addClass('alert-danger');
-                $("#erro_senha").show("slow");
-                e.preventDefault();
-            }
-        }
-
-        //Se não existir valor no campo senha atual
-        else {
-            $('#senha_atual').addClass('error').removeClass('ok');
-            $("#erro_senha p").text("Entre com sua senha atual!").addClass('alert').addClass('alert-danger');
-            $("#erro_senha").show("slow");
-            e.preventDefault();
-        }
-    }
-    else {
-        e.preventDefault();
-    }
-
-}*/
-
+/*
+ 
+ 
+ 
+ //Verifica se a senha digitada pelo usuário é a atual
+ function alterar_senha(obj) {
+ //Envia os dados para serem processados pela api verificarSenha.php
+ $.post("/valid/app/api/alterarSenha.php", {
+ login: $('#id-usuario').text(),
+ senha_atual: $('#senha_atual').val(),
+ senha_nova: $('#nova_senha').val()
+ }, function (data, status) {
+ 
+ });
+ }
+ 
+ */

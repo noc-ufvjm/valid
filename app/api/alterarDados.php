@@ -19,6 +19,8 @@ if ($tipo == 0) {
     $ldap->modificar("email_alternativo", "uid=$uid,ou=teste,ou=usuarios,dc=ufvjm,dc=edu,dc=br", $dado);
 } else if ($tipo == 2) {
     $ldap->modificar("telefone", "uid=$uid,ou=teste,ou=usuarios,dc=ufvjm,dc=edu,dc=br", $dado);
+} else if ($tipo == 3) {
+    $ldap->modificar("senha", "uid=$uid,ou=teste,ou=usuarios,dc=ufvjm,dc=edu,dc=br", $dado);
 } else {
     echo json_encode(false);
 }

@@ -229,6 +229,8 @@ class Ldap {
             $value["mailAlternateAddress"] = $valor;
         else if ($tipo === "telefone") {
             $value["telephoneNumber"] = $valor;
+        } else if ($tipo === "senha") {
+            $value["userPassword"] = "{MD5}" . base64_encode(md5($valor, TRUE));
         }
 
         //Função que adiciona ou altera usuário no ldap
