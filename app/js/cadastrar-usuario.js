@@ -1,122 +1,175 @@
 //Variáveis globais
 var dados = false, login = false, cpf = false;
 
-//Verifica se o login existe
-function verificarLogin() {
-    $.get('/valid/app/api/verificarLogin.php?login=' + $('#uid').val(), function (data, status) {
-        if ($('#uid').val() !== "") {
-            if (status !== 'success') {
-                $('#uid').addClass('error').removeClass('ok');
-                ;
-                loginTrulse(false);
-            } else if (data === 'false') {
-                $('#uid').addClass('error').removeClass('ok');
-                ;
-                loginTrulse(false);
-            } else {
-                $('#uid').addClass('ok').removeClass('error');
-                ;
-                loginTrulse(true);
+
+
+//Verifica se o CPF existe e já carrega os dados
+function getSigaByCpf(cpf) {
+
+    console.log(cpf);
+
+    //Envia os dados para serem processados pela api dadosSiga.php
+    $.post("/valid/app/api/dadosSiga.php", {
+        cpf: cpf
+    }, function (data, status) {
+        //Se o post tiver dado certo, verificar a resposta
+        if (status === 'success') {
+            console.log(data[0]);
+            if (data[0] === 0) {
+                mensagem("O CPF já se encontra cadastrado no LDAP", 0);
             }
-        }
-        else {
-            $('#uid').removeClass('ok error');
-            loginTrulse(false);
+            else if (data[0] === 1) {
+                $('#cn').val(data[1].cn);
+                $('#sn').val(data[1].sn);
+                $('#mailAlternateAddress').val(data[1].mailalternateaddress);
+                $('#employeeNumber').val(data[1].employeenumber);
+                $('#telephoneNumber').val(data[1].telefones[0]);
+                $('#cellphoneNumber').val(data[1].telefones[1]);
+            }
+            else if (data[0] === 2) {
+                mensagem("CPF não encontrado no SIGA!", 0);
+            }
         }
     });
 }
 
-function loginTrulse(trulse) {
-    login = trulse;
-}
-
-//Verifica se o CPF existe
-function verificarCPF() {
-    if (($('#brPersonCPF').val()).length === 11) {
-        $.get('/valid/app/api/verificarLogin.php?login=' + $('#brPersonCPF').val(), function (data, status) {
-            if ($('#brPersonCPF').val() !== "") {
-                if (status !== 'success') {
-                    $('#brPersonCPF').addClass('error').removeClass('ok');
-                    cpfTrulse(false);
-                } else if (data === 'false') {
-                    $('#brPersonCPF').addClass('error').removeClass('ok');
-                    cpfTrulse(false);
-                } else {
-                    $('#brPersonCPF').addClass('ok').removeClass('error');
-                    cpfTrulse(true);
-                }
-            }
-            else {
-                $('#brPersonCPF').removeClass('ok error');
-                cpfTrulse(false);
-            }
-        });
-    }
-    else if (($('#brPersonCPF').val()).length === 0){
-        $('#brPersonCPF').removeClass('ok error');
-        mensagem();
-        cpfTrulse(false);
-    }
-    else {
-        $('#brPersonCPF').addClass('error').removeClass('ok');
-        mensagem("Por favor, verifique seu cpf!");
-        cpfTrulse(false);
-    }
-}
-
-function cpfTrulse(trulse) {
-    cpf = trulse;
-}
-
-//Verifica se o login existe
-function getSIGAbyCPF() {
-    
-}
 
 
 
-//Verifica os dados do cliente
-function verificaCampos() {
-    var vetor = [$('#cn'), $('#sn'), $('#uid'), $('#employeeNumber'), $('#brPersonCPF'), $('#mailAlternateAddress'), $('#telephoneNumber'), $('#userPassword'), $('#check_senha')];
 
-    if ($('#cn').val() && $('#sn').val() && $('#uid').val() && $('#employeeNumber').val() && $('#brPersonCPF').val() && $('#mailAlternateAddress').val() && $('#userPassword').val() && $('#check_senha').val()) {
-    }
-    else {
-        for (var a = 0; a < 11; ++a) {
-            if (!vetor[a].val()) {
-                vetor[a].addClass('error');
-            }
-        }
-        return false;
-    }
-}
 
-//Verifica os dados do cliente
-function verificaDados() {
-    if ($('#cn').val() && $('#sn').val() && $('#employeeNumber').val() && $('#brPersonCPF').val() && $('#mailAlternateAddress').val() && $('#telephoneNumber'))
-        return true;
-    else
-        return false;
 
-}
+/*
+ //Verifica se o login existe
+ function verificarLogin() {
+ $.get('/valid/app/api/verificarLogin.php?login=' + $('#uid').val(), function (data, status) {
+ if ($('#uid').val() !== "") {
+ if (status !== 'success') {
+ $('#uid').addClass('error').removeClass('ok');
+ ;
+ loginTrulse(false);
+ } else if (data === 'false') {
+ $('#uid').addClass('error').removeClass('ok');
+ ;
+ loginTrulse(false);
+ } else {
+ $('#uid').addClass('ok').removeClass('error');
+ ;
+ loginTrulse(true);
+ }
+ }
+ else {
+ $('#uid').removeClass('ok error');
+ loginTrulse(false);
+ }
+ });
+ }
+ 
+ function loginTrulse(trulse) {
+ login = trulse;
+ }
+ 
+ //Verifica se o CPF existe
+ function verificarCPF() {
+ if (($('#brPersonCPF').val()).length === 11) {
+ $.get('/valid/app/api/verificarLogin.php?login=' + $('#brPersonCPF').val(), function (data, status) {
+ if ($('#brPersonCPF').val() !== "") {
+ if (status !== 'success') {
+ $('#brPersonCPF').addClass('error').removeClass('ok');
+ cpfTrulse(false);
+ } else if (data === 'false') {
+ $('#brPersonCPF').addClass('error').removeClass('ok');
+ cpfTrulse(false);
+ } else {
+ $('#brPersonCPF').addClass('ok').removeClass('error');
+ cpfTrulse(true);
+ }
+ }
+ else {
+ $('#brPersonCPF').removeClass('ok error');
+ cpfTrulse(false);
+ }
+ });
+ }
+ else if (($('#brPersonCPF').val()).length === 0){
+ $('#brPersonCPF').removeClass('ok error');
+ mensagem();
+ cpfTrulse(false);
+ }
+ else {
+ $('#brPersonCPF').addClass('error').removeClass('ok');
+ mensagem("Por favor, verifique seu cpf!");
+ cpfTrulse(false);
+ }
+ }
+ 
+ function cpfTrulse(trulse) {
+ cpf = trulse;
+ }
+ 
+ 
+ 
+ 
+ 
+ //Verifica os dados do cliente
+ function verificaCampos() {
+ var vetor = [$('#cn'), $('#sn'), $('#uid'), $('#employeeNumber'), $('#brPersonCPF'), $('#mailAlternateAddress'), $('#telephoneNumber'), $('#userPassword'), $('#check_senha')];
+ 
+ if ($('#cn').val() && $('#sn').val() && $('#uid').val() && $('#employeeNumber').val() && $('#brPersonCPF').val() && $('#mailAlternateAddress').val() && $('#userPassword').val() && $('#check_senha').val()) {
+ }
+ else {
+ for (var a = 0; a < 11; ++a) {
+ if (!vetor[a].val()) {
+ vetor[a].addClass('error');
+ }
+ }
+ return false;
+ }
+ }
+ 
+ //Verifica os dados do cliente
+ function verificaDados() {
+ if ($('#cn').val() && $('#sn').val() && $('#employeeNumber').val() && $('#brPersonCPF').val() && $('#mailAlternateAddress').val() && $('#telephoneNumber'))
+ return true;
+ else
+ return false;
+ 
+ }*/
 
 //Mostra mensagem
-function mensagem(texto) {
-    $("#erro p").text(texto).addClass('alert-danger').addClass('alert');
-    
-    if(texto)
-        $("#erro").show("slow");
-    else
-        $("#erro").hide("slow"); 
+function mensagem(texto, tipo) {
+
+    if (tipo) {
+        $("#erro p").text(texto).addClass('alert-danger').removeClass('alert-success');
+
+        if (texto)
+            $("#erro").show("slow");
+        else
+            $("#erro").hide("slow");
+    } else {
+        $("#erro p").text(texto).addClass('alert-danger').removeClass('alert-success');
+
+        if (texto)
+            $("#erro").show("slow");
+        else
+            $("#erro").hide("slow");
+    }
+
+    setTimeout(function () {
+        $("#erro").hide('slow');
+    }, 2000);
 }
 
 $(document).ready(function () {
     $('#brPersonCPF').keyup(function () {
-        verificarCPF();
+        //verificarCPF();
     });
 
     $('#buscar-siga').click(function (e) {
-        
+        if ($('#brPersonCPF').val() !== '' && $('#brPersonCPF').val().length === 11) {
+            getSigaByCpf($('#brPersonCPF').val());
+        }
+
     });
 
     $('#uid').keyup(function () {

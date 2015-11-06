@@ -28,8 +28,6 @@
         
         //O vetor de informações é vinculado à variável usuário do smarty
         $s->assign('usuario', $usuario);
-        
-        var_dump($usuario);
     }
     
         $s->display('solicitar-acesso.html');

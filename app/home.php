@@ -24,6 +24,13 @@ $ldap = new Ldap;
 
 $usuario = $ldap->getUsuario($_SESSION['login']);
 
+//Verifica se o usuário possui e-mail alternativo
+if ($usuario->mailAlternateAddress) {
+    $s->assign('alt_mail', true);
+} else {
+    $s->assign('alt_mail', false);
+}
+
 //Verifica se o usuário possui foto
 if ($usuario->jpegPhoto) {
     //Se existir, baixar a foto para a pasta do site e associar valor verdadeiro à variável foto, usada no html da "home"

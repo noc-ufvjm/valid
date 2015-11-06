@@ -53,6 +53,35 @@ class Ldap {
             echo "Impossível conectar-se com o servidor LDAP";
         }
     }
+    
+    public function userExists($busca) {
+        //Realiza conexão com o LDAP
+        $this->conectar();
+
+        /* Verifica se o login está sendo ralizado com o cpf ou com o uid do usuário *
+         * O filtro é alterado de acordo com o tipo de login utilizado */
+        if (is_numeric($busca)) {
+            $filter = "brPersonCPF=$busca";
+        } else {
+            $filter = "uid=$busca";
+        }
+
+        //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
+        if ($this->getLdapbind()) {
+
+            //Pesquisa pelos dados do usuário no LDAP
+            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "mailAlternateAddress", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
+
+            //Recebe todas as entradas da pesquisa realizada
+            $info = ldap_get_entries($this->getLdapconn(), $sr);
+            
+            if ($info['count'] != 0) {
+                return true;
+            }
+            else return false;
+        }
+        
+    }
 
     //Realiza a autenticação no LDAP
     public function autenticacao($login, $senha) {

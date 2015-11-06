@@ -28,6 +28,24 @@ class Siga {
         }
     }
     
+    public function userExists($cpf) {
+        //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
+        $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
+        
+        //Realiza conexão ao banco de dados do SIGA
+        $this->conectar();
+        
+        //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
+        $result = pg_exec($this->sigaconn, "select u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
+        
+        //Os dados pesquisados são recebidos por este objeto.
+        $array = pg_fetch_all($result);
+        
+        if($array[1]) return true;
+        else return false;
+        
+    }
+    
     //Vericifica se existe determinado CPF e senha no SIGA
     public function autenticacao($cpf, $senha) {
         
@@ -57,10 +75,9 @@ class Siga {
         }
         return FALSE;
     }
-
+    
     //Pega as informações do usuário do SIGA e as retorna
     public function getUsuario($cpf) {
-
         //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
         $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
 
@@ -99,12 +116,13 @@ class Siga {
         //Eliminação das variáveis não tulizadas mais
         unset($obj->telefone);
         unset($obj->celular);
+        unset($obj->senha);
         
         //Criação do usuário com os valores retirados do SIGA
-        $usuario = new Usuario;
+        $usuario = new Usuario();
         $usuario->setUsuario($obj);
         
-        return $usuario;
+        return $obj;
     }
 
     //Formata os números de telefone
