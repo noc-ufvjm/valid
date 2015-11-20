@@ -85,7 +85,7 @@ class Siga {
         $this->conectar();
 
         //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
-        $result = pg_exec($this->sigaconn, "select p.nome as cn, p.email as mailalternateaddress, p.telefone, p.celular, u.login as employeenumber, u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
+        $result = pg_exec($this->sigaconn, "select p.nome as cn, p.email as mail, p.telefone, p.celular, u.login as employeenumber, u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
         
         //Os dados pesquisados são recebidos por este objeto.
         $obj = pg_fetch_object($result);

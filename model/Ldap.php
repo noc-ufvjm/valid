@@ -53,7 +53,7 @@ class Ldap {
             echo "Impossível conectar-se com o servidor LDAP";
         }
     }
-    
+
     public function userExists($busca) {
         //Realiza conexão com o LDAP
         $this->conectar();
@@ -70,17 +70,16 @@ class Ldap {
         if ($this->getLdapbind()) {
 
             //Pesquisa pelos dados do usuário no LDAP
-            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "mailAlternateAddress", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
+            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid"));
 
             //Recebe todas as entradas da pesquisa realizada
             $info = ldap_get_entries($this->getLdapconn(), $sr);
-            
+
             if ($info['count'] != 0) {
                 return true;
-            }
-            else return false;
+            } else
+                return false;
         }
-        
     }
 
     //Realiza a autenticação no LDAP
@@ -120,19 +119,19 @@ class Ldap {
                 $hash_ldap = strtoupper($h_ldap[0]) . "}" . $h_ldap[1];
 
                 //Se a senha digitada (convertida para MD5) for igual a que já está no LDAP (Já em MD5), retorna TRUE
-                if ($hash_ldap == "{MD5}" . base64_encode(md5($senha, TRUE))) {
+                if ($hash_ldap == "{MD5}" . base64_encode(md5($senha, true))) {
 
-                    return TRUE;
+                    return true;
 
                     //Se não for igual, retorna FALSE
                 } else {
-                    return FALSE;
+                    return false;
                 }
             }
             //Se não, retorna FALSE e mostra mensagem de erro
         } else {
             error_log("Não foi possível estabelecer uma conexão com o LDAP");
-            return FALSE;
+            return false;
         }
     }
 
@@ -154,7 +153,7 @@ class Ldap {
         if ($this->getLdapbind()) {
 
             //Pesquisa pelos dados do usuário no LDAP
-            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "mailAlternateAddress", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
+            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid", "cn", "sn", "givenName", "userPassword", "mail", "brPersonCPF", "employeeNumber", "jpegPhoto", "telephoneNumber"));
 
             //Recebe todas as entradas da pesquisa realizada
             $info = ldap_get_entries($this->getLdapconn(), $sr);
@@ -178,7 +177,6 @@ class Ldap {
                 $obj->givenName = @$info['givenName'][0];
                 $obj->userPassword = @$info['userPassword'][0];
                 $obj->mail = @$info['mail'][0];
-                $obj->mailAlternateAddress = @$info['mailAlternateAddress'][0];
                 $obj->brPersonCPF = @$info['brPersonCPF'][0];
                 $obj->employeeNumber = @$info['employeeNumber'][0];
                 $obj->jpegPhoto = @$info['jpegPhoto'][0];
@@ -197,28 +195,35 @@ class Ldap {
                 return $usuario;
                 //Se não receber os dados
             } else {
-                return FALSE;
+                return false;
             }
             //Se não, retorna FALSE e mostra mensagem de erro
         } else {
             error_log("Não foi possível estabelecer uma conexão com o LDAP");
-            return FALSE;
+            return false;
         }
     }
 
-    public function existeSolicitacao($cpf) {
+    public function estadoUsuario($busca, $grupo) {
         //Realiza conexão com o LDAP
         $this->conectar();
 
-        $filter = "brPersonCPF=$cpf";
+        if (is_numeric($busca)) {
+            $filter = "brPersonCPF=$busca";
+        } else {
+            $filter = "uid=$busca";
+        }
 
         //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
         if ($this->getLdapbind()) {
-
             //Pesquisa pelos dados do usuário no LDAP
-            $sr = ldap_search($this->getLdapconn(), "ou=solicitacoes,dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF"));
+            $sr = ldap_search($this->getLdapconn(), $grupo . ",dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF"));
 
-            return ldap_count_entries($this->getLdapconn(), $sr);
+            //Se o usuário existir nesse grupo
+            if (ldap_count_entries($this->getLdapconn(), $sr)) {
+                return true;
+            } else
+                return false;
         }
     }
 
@@ -226,21 +231,20 @@ class Ldap {
         //Realiza conexão com o LDAP
         $this->conectar();
 
-        //Valores a inserir no cadastro
-        $values["cn"] = $vetor[0];
-        $values["sn"] = $vetor[1];
-        $values["employeeNumber"][0] = $vetor[2];
-        $values["brPersonCPF"][0] = $vetor[3];
-        $values["uid"] = $vetor[4];
-        $values["mail"] = $vetor[5];
-        $values["mailAlternateAddress"] = $vetor[5];
-        $values["telephoneNumber"][0] = $vetor[6];
+        //Valores a inserir no cadastro (Seguindo a ordem do vetor da api)
+        $values["brPersonCPF"] = $vetor[0];
+        $values["cn"] = $vetor[1];
+        $values["sn"] = $vetor[2];
+        $values["employeeNumber"] = $vetor[3];
+        $values["givenName"] = $vetor[4];
+        $values["uid"] = $vetor[5];
+        $values["mail"] = $vetor[6];
         $values["telephoneNumber"][0] = $vetor[7];
-        $values["userPassword"] = md5("123456");
+        $values["telephoneNumber"][1] = $vetor[8];
+        $values["userPassword"] = "{MD5}" . base64_encode(md5($vetor[9], true));
 
         $values["objectClass"][0] = "inetOrgPerson";
         $values["objectClass"][1] = "brPerson";
-        $values["objectClass"][2] = "qmailUser";
 
         //Função que adiciona ou altera usuário no ldap
         $add = ldap_add($this->getLdapconn(), $dn, $values);
@@ -255,7 +259,7 @@ class Ldap {
         if ($tipo === "apelido")
             $value["givenName"] = $valor;
         else if ($tipo === "email_alternativo")
-            $value["mailAlternateAddress"] = $valor;
+            $value["mail"] = $valor;
         else if ($tipo === "telefone") {
             $value["telephoneNumber"] = $valor;
         } else if ($tipo === "senha") {
@@ -264,7 +268,7 @@ class Ldap {
 
         //Função que adiciona ou altera usuário no ldap
         ldap_modify($this->getLdapconn(), $dn, $value);
-        
+
         return ldap_error($this->getLdapconn());
     }
 

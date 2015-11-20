@@ -16,17 +16,17 @@ function autenticacao(e) {
                 $("#form_solicitacao").submit();
 
                 //Se o usuário já existir dentro do ldap, ele já possui acesso direto ao valid, então, mostra a mensagem
-            } else if (data === 'Already exists') {
-                
-                mensagem("Usuário já possui acesso ao ValID!");
-
-                //Se o usuário já tiver realizado a solicitação de acesso
             } else if (data === 'Already in progress') {
 
                 mensagem("Usuário já solicitou acesso ao ValID!");
 
                 //Erro no cpf ou na senha
-            } else {
+            } else if (data === 'Already exists') {
+                
+                mensagem("Usuário já possui acesso ao ValID!");
+
+                //Se o usuário já tiver realizado a solicitação de acesso
+            }  else {
                 mensagem("Favor verificar CPF e/ou senha!");
             }
         }

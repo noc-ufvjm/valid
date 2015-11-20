@@ -11,6 +11,7 @@
         exit;
     }
 
+    //Instância da classe Smarty
     $s = new Smarty;
 
     //Diretório de templates
@@ -29,6 +30,6 @@
         //O vetor de informações é vinculado à variável usuário do smarty
         $s->assign('usuario', $usuario);
     }
-    
+        //Display da página html
         $s->display('solicitar-acesso.html');
     
