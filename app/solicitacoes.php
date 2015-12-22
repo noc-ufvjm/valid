@@ -11,6 +11,9 @@ $ldap = new Ldap;
 if (!array_key_exists('login', $_SESSION)) {
     header('Location: index.php');
     exit;
+    //Se o usuário não for um admin, não terá a cesso a esta página
+} else if(!$ldap->isAdmin($_SESSION['login'], "ou=usuarios")) {
+    header('Location: home.php');
 }
 
 $s = new Smarty;
@@ -53,4 +56,4 @@ if ($ldap->isAdmin($_SESSION['login'], "ou=usuarios")) {
 }
 
 //Mostra a página home
-$s->display('home.html');
+$s->display('solicitacoes.html');

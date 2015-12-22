@@ -1,5 +1,13 @@
 {extends file="template.html"}
 
+{block name="barra"}
+{if $estado == "adm"}
+    {include file="barra-adm.html"}
+{else}
+    {include file="barra.html"}
+{/if}
+{/block}
+
 {block name="barra-css"}navbar.css{/block}
 
 {block name="css"}<link href="css/alterar-dados.css" rel="stylesheet">{/block}

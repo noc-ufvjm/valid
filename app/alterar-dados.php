@@ -6,10 +6,16 @@ require_once dirname(__file__) . '/../model/Ldap.php';
 
 session_start();
 
+//Objeto da classe LDAP
+$ldap = new Ldap;
+
 //Se a variável login não existir na sessão, não deixar passar do index
 if (!array_key_exists('login', $_SESSION)) {
     header('Location: index.php');
     exit;
+    //Se o usuário for um solicitante, ele não poderá alterar seus dados
+} else if ($ldap->userExists($_SESSION['login'], "ou=solicitacoes")) {
+    header('Location: home.php');
 }
 
 $s = new Smarty;
@@ -20,8 +26,6 @@ $s->addTemplateDir("../view/templates");
 //Diretório de templates compilados
 $s->setCompileDir("../view/com_templates");
 
-//Display de página que utiliza template "template"
-$ldap = new Ldap;
 $usuario = $ldap->getUsuario($_SESSION['login']);
 
 //Verifica se o usuário possui foto
@@ -37,6 +41,14 @@ if ($usuario->jpegPhoto) {
 
 //Associa à variável usuário, um objeto recheado de valores para serem utilizados no html da home
 $s->assign('usuario', $usuario);
+
+if ($ldap->isAdmin($_SESSION['login'], "ou=usuarios")) {
+    $s->assign('estado', "adm");
+} else if ($ldap->userExists($_SESSION['login'], "ou=solicitacoes")) {
+    $s->assign('estado', "sol");
+} else {
+    $s->assign('estado', "usu");
+}
 
 //Mostra a página home
 $s->display('alterar-dados.html');

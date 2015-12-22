@@ -1,0 +1,40 @@
+{extends file="template.html"}
+
+{block name="barra"}{include file="barra-adm.html"}{/block}
+
+{block name="barra-css"}navbar.css{/block}
+{block name="css"}<link href="css/solicitacoes.css" rel="stylesheet">{/block}
+{block name="js"}<script src="js/solicitacoes.js"></script>{/block}
+
+{block name="code"}
+<div id="login-block">
+    <h1 id="titulo">Solicitações</h1>
+    <div class="marrow text-center">
+        <div class="col-xs-12">
+            <div class="row">
+                <div id='tabelas-place' class="quadro">
+                    <table id="tabela" class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-6">
+                    <div id="processamento">
+                        <p align="center"></p>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-2 text-right">
+                    <button type="submit" class="btn btn-default" name="desmarcar-todos" id="desmarcar-todos">Desmarcar Todos</button>
+                </div>
+                <div class="col-xs-2 text-right">
+                    <button type="submit" class="btn btn-primary" name="processar" id="processar">Processar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

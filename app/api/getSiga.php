@@ -16,11 +16,10 @@ $siga = new Siga();
 
 //Se o usuário existir no siga, verificar se o usuário já existe no ldap
 if ($siga->autenticacao($cpf, $senha)) {
-    
     $ldap = new Ldap;
     
     //Se o usuário já existir no ldap, retornar mensagem e parar execução
-    if ($ldap->estadoUsuario($cpf, "ou=solicitacoes")){
+    if ($ldap->userExists($cpf, "ou=solicitacoes")){
         echo json_encode('Already in progress');
         exit;
     } else if($ldap->getUsuario($cpf)) {

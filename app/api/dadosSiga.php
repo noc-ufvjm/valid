@@ -15,7 +15,7 @@ $siga = new Siga();
 $usuario = new Usuario();
 
 //Testa conexão do LDAP com dados do usuário
-if($siga->userExists($cpf) && $ldap->userExists($cpf)){
+if($siga->userExists($cpf) && $ldap->userExists($cpf, "ou=usuarios")){
     echo json_encode(array(0));
     exit;
 } else if($siga->userExists($cpf) && $ldap->getUsuario($cpf) === false) {

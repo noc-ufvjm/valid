@@ -6,9 +6,15 @@ require_once dirname(__file__) . '/../model/Ldap.php';
 
 session_start();
 
+//Objeto da classe LDAP
+$ldap = new Ldap;
+
+//Se a variável login não existir na sessão, não deixar passar do index
 if (!array_key_exists('login', $_SESSION)) {
     header('Location: index.php');
     exit;
+} else if(!$ldap->isAdmin($_SESSION['login'])) {
+    header('Location: home.php');
 }
 
 $s = new Smarty;
@@ -18,9 +24,6 @@ $s->addTemplateDir("../view/templates");
 
 //Diretório de templates compilados
 $s->setCompileDir("../view/com_templates");
-
-//Display de página que utiliza template "template"
-$ldap = new Ldap;
 
 $usuario = $ldap->getUsuario($_SESSION['login']);
 

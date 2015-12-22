@@ -1,11 +1,10 @@
 function autenticacao(e) {
-
     //Envia os dados para serem processados pela api getsiga.php
     $.post("/valid/app/api/getSiga.php", {
         cpf: $('#cpf').val(),
         senha: $('#senha').val()
     }, function (data, status) {
-
+        
         //Se o post tiver dado certo, verificar a resposta
         if (status === 'success') {
 
@@ -43,7 +42,6 @@ function mensagem(texto) {
 }
 
 $(document).ready(function () {
-
     //Ao se preencher o cpf e a senha do siga, o envio da solicitação de acesso é feito
     $("#solicitar").click(autenticacao);
 

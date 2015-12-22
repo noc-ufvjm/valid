@@ -1,20 +1,14 @@
 div#login-block {
     position: absolute;
-
     margin: auto;
     top: 0; left: 0; bottom: 0; right: 0;
-
-    width: 50%;
-    height: 480px;
-
+    width: 955px;
+    height: 505px;
     background: white;
-
     opacity: 0.8;
-
     box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
     -moz-box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
     -webkit-box-shadow: 1px 2px 20px rgba(0,0,0,0.3);
-
     border-radius: 25px;
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
@@ -33,47 +27,39 @@ div h1{
     font-size: 30px;
 }
 
-img#user {
-    height: 80px;
-    width: 80px; 
-    margin: auto;
-    margin-top: 5px;
-    margin-bottom: 14px;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
-    border-radius: 150px;
-    -webkit-border-radius: 150px;
-    -moz-border-radius: 150px;
+td {
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-div#imagem {
-    position: absolute;
-}
-
-div.form-block {
+.quadro {
     display: inline-block;
     vertical-align: top;
     margin: auto;
-    margin-top: 30px;
-    width: 92%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 350px;
+    width: 924px;
+    overflow: auto;
 }
 
-label {
-    float: left;
-    color: #b2c2e4;
+.table-first {
+    font-weight: 900;
 }
 
-p#solicitacao {
-    margin: auto;
-    margin-top: 140px;
-    width: 80%;
+td.cn {
+    text-align: left;
 }
 
-.ok {
-    border: solid 1px green;
-    border-radius: 4px;
+div#processamento p {
+    height: 35px;
+    padding: 6px;
 }
 
-.error {
-    border: solid 1px red;
-    border-radius: 4px;
+#vazio {
+    width: 300px;
+    margin-left: 320px;
+    margin-top: 150px;
 }

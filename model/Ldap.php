@@ -31,7 +31,7 @@ class Ldap {
         //Se CONSEGUIR realizar conexão com o host
         if ($this->ldap_connect) {
 
-            //Inicia TLS. Se não der certo, encerra conexão com LDAP
+            /*//Inicia TLS. Se não der certo, encerra conexão com LDAP
             if (!ldap_start_tls($this->ldap_connect)) {
 
                 echo "Falha no start_tls";
@@ -40,7 +40,7 @@ class Ldap {
                 ldap_close($this->ldap_connect);
 
                 return;
-            }
+            }*/
 
             //Seta Protocolo - Manter versão 3
             ldap_set_option($this->ldap_connect, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -53,8 +53,8 @@ class Ldap {
             echo "Impossível conectar-se com o servidor LDAP";
         }
     }
-
-    public function userExists($busca) {
+    
+    public function userExists($busca, $grupo) {
         //Realiza conexão com o LDAP
         $this->conectar();
 
@@ -68,14 +68,55 @@ class Ldap {
 
         //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
         if ($this->getLdapbind()) {
-
             //Pesquisa pelos dados do usuário no LDAP
-            $sr = ldap_search($this->getLdapconn(), Config::get('base_dn'), $filter, array("uid"));
+            $sr = ldap_search($this->getLdapconn(), $grupo . ",dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF", "memberOf"));
+
+            //Se o usuário existir nesse grupo
+            if (ldap_count_entries($this->getLdapconn(), $sr)) {
+                return true;
+            } else
+                return false;
+        }
+    }
+    
+    public function getAllUsers($grupo) {
+        //Realiza conexão com o LDAP
+        $this->conectar();
+        
+        $filter = "(objectClass=inetOrgPerson)";
+
+        //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
+        if ($this->getLdapbind()) {
+            //Pesquisa pelos dados do usuário no LDAP
+            $sr = ldap_search($this->getLdapconn(), $grupo . ",dc=ufvjm,dc=edu,dc=br", $filter, array("cn", "uid", "mail", "brPersonCPF"));
+            
+            //Se o usuário existir nesse grupo
+            //Recebe todas as entradas da pesquisa realizada
+            $info = ldap_get_entries($this->getLdapconn(), $sr);
+            
+            //Se receber dados, verifica se a senha digitada (convertida para MD5) é a mesma que consta no LDAP (já em MD5)
+            if ($info['count'] != 0) {
+                return $info;
+            }
+        }
+    }
+    
+    public function isAdmin($busca) {
+        //Realiza conexão com o LDAP
+        $this->conectar();
+
+        $filter = "(&(memberOf=cn=ldap,ou=identity,ou=grupos,dc=ufvjm,dc=edu,dc=br)(uid=$busca))";
+        
+        //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
+        if ($this->getLdapbind()) {
+            //Pesquisa pelos dados do usuário no LDAP
+            $sr = ldap_search($this->getLdapconn(), "dc=ufvjm,dc=edu,dc=br", $filter, array("count"));
 
             //Recebe todas as entradas da pesquisa realizada
             $info = ldap_get_entries($this->getLdapconn(), $sr);
-
-            if ($info['count'] != 0) {
+            
+            //Se o usuário existir nesse grupo
+            if ($info["count"]) {
                 return true;
             } else
                 return false;
@@ -203,29 +244,26 @@ class Ldap {
             return false;
         }
     }
-
-    public function estadoUsuario($busca, $grupo) {
+    
+    public function moveUsuario($uid) {
         //Realiza conexão com o LDAP
         $this->conectar();
-
-        if (is_numeric($busca)) {
-            $filter = "brPersonCPF=$busca";
-        } else {
-            $filter = "uid=$busca";
-        }
-
-        //Se o bind tiver sido um sucesso fazer a coleta dos dados do usuário e devolver na forma de objeto usuário
-        if ($this->getLdapbind()) {
-            //Pesquisa pelos dados do usuário no LDAP
-            $sr = ldap_search($this->getLdapconn(), $grupo . ",dc=ufvjm,dc=edu,dc=br", $filter, array("brPersonCPF"));
-
-            //Se o usuário existir nesse grupo
-            if (ldap_count_entries($this->getLdapconn(), $sr)) {
-                return true;
-            } else
-                return false;
-        }
+        
+        $dn_atual = "uid=" . $uid . ",ou=solicitacoes,dc=ufvjm,dc=edu,dc=br";
+        
+        $nova_dn = "ou=usuarios,dc=ufvjm,dc=edu,dc=br";
+        
+        ldap_rename($this->ldap_connect, $dn_atual, "uid=" . $uid, $nova_dn, true);
+        
+        return ldap_error($this->ldap_connect);
     }
+    
+    public function rejeitaUsuario($uid) {
+        //Realiza conexão com o LDAP
+        $this->conectar();
+    }
+    
+    
 
     public function cadastrar($vetor, $dn) {
         //Realiza conexão com o LDAP

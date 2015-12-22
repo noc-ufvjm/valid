@@ -27,40 +27,41 @@ class Siga {
             return;
         }
     }
-    
+
     public function userExists($cpf) {
         //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
         $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
-        
-        //Realiza conexão ao banco de dados do SIGA
-        $this->conectar();
-        
-        //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
-        $result = pg_exec($this->sigaconn, "select u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
-        
-        //Os dados pesquisados são recebidos por este objeto.
-        $array = pg_fetch_all($result);
-        
-        if($array[1]) return true;
-        else return false;
-        
-    }
-    
-    //Vericifica se existe determinado CPF e senha no SIGA
-    public function autenticacao($cpf, $senha) {
-        
-        //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
-        $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
-        
+
         //Realiza conexão ao banco de dados do SIGA
         $this->conectar();
 
         //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
         $result = pg_exec($this->sigaconn, "select u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
-        
+
         //Os dados pesquisados são recebidos por este objeto.
         $array = pg_fetch_all($result);
-        
+
+        if ($array[1])
+            return true;
+        else
+            return false;
+    }
+
+    //Vericifica se existe determinado CPF e senha no SIGA
+    public function autenticacao($cpf, $senha) {
+
+        //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
+        $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
+
+        //Realiza conexão ao banco de dados do SIGA
+        $this->conectar();
+
+        //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
+        $result = pg_exec($this->sigaconn, "select u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
+
+        //Os dados pesquisados são recebidos por este objeto.
+        $array = pg_fetch_all($result);
+
         //Verifica os cadastros com o determinado CPF dentro do SIGA
         foreach ($array as $values) {
             if (md5($senha) == $values['senha']) {
@@ -75,9 +76,10 @@ class Siga {
         }
         return FALSE;
     }
-    
+
     //Pega as informações do usuário do SIGA e as retorna
     public function getUsuario($cpf) {
+
         //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
         $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
 
@@ -85,27 +87,27 @@ class Siga {
         $this->conectar();
 
         //Realiza a pesquisa no banco de dados do SIGA, baseando-se no CPF
-        $result = pg_exec($this->sigaconn, "select p.nome as cn, p.email as mail, p.telefone, p.celular, u.login as employeenumber, u.passmd5 as senha from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
-        
+        $result = pg_exec($this->sigaconn, "select p.nome as cn, p.email as mail, p.telefone, p.celular, u.login as employeenumber, u.passmd5 as senha, u.idpessoa as id from cm_pessoa p join cm_usuario u using (idpessoa) where cpf = '$cpf'");
+
         //Os dados pesquisados são recebidos por este objeto.
         $obj = pg_fetch_object($result);
 
         //O nome completo do usuário é formatado
         $obj->cn = $this->formata_nome($obj->cn);
-        
+
         //Separação dos sobrenomes do primeiro nome
         $aux = explode(" ", $obj->cn);
         $obj->cn = $aux[0];
         $obj->givenName = $aux[0];
-        
+
         //Eliminação do primeiro nome
         unset($aux[0]);
-        
+
         //Junta os sobrenomes em apenas uma variável
         $obj->sn = implode(" ", $aux);
-        
+
         $obj->brPersonCPF = $cpf;
-       
+
         //Os telefones são formatados
         $obj->telefones = array();
         if ($obj->telefone)
@@ -117,11 +119,11 @@ class Siga {
         unset($obj->telefone);
         unset($obj->celular);
         unset($obj->senha);
-        
+
         //Criação do usuário com os valores retirados do SIGA
         $usuario = new Usuario();
         $usuario->setUsuario($obj);
-        
+
         return $obj;
     }
 
@@ -146,4 +148,5 @@ class Siga {
         $nome = str_replace($a1, $a2, $nome);
         return $nome;
     }
+
 }

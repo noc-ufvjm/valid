@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__file__) . '/../model/Ldap.php';
+
 header('content-type: application/json');
 
 $cn = $_REQUEST['cn'];
