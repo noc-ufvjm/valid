@@ -2,17 +2,17 @@
 
 {block name="barra"}
 {if $estado == "adm"}
-    {include file="barra-adm.html"}
+{include file="barra-adm.html"}
 {elseif $estado eq "sol"}
-    {include file="barra-sol.html"}
+{include file="barra-sol.html"}
 {else}
-    {include file="barra.html"}
+{include file="barra.html"}
 {/if}
 {/block}
 
 {block name="barra-css"}navbar.css{/block}
 {block name="css"}<link href="css/home.css" rel="stylesheet">{/block}
-{block name="js"}{/block}
+{block name="js"}<script src="js/home.js"></script>{/block}
 
 {block name="code"}
 <div id="login-block">
@@ -21,13 +21,13 @@
         <div class="form-block">
             <div class="row">
                 <div class="col-xs-3 fundo-imagem">
-                    
+
                     {if $foto}
                     <img id="user" src="imagens/{$usuario->uid}.jpg"/>
                     {else}
                     <img id="user" src="imagens/user.png"/>
                     {/if}
-                    
+
                 </div>
                 <div class="col-xs-9">
                     <div class="row">
@@ -54,13 +54,17 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-xs-3"></div>
+                <div class="col-xs-3">
+                    <div class="row" id="vinculos">
+                    </div>
+                </div>
                 <div class="col-xs-9">
                     <div class="row">
                         <div class="col-xs-3">
                             <h6>CPF</h6>
-                            <p>{$usuario->brPersonCPF}<p/>
+                            <p id="cpf">{$usuario->brPersonCPF}<p/>
                         </div>
                         <div class="col-xs-3">
                             <h6>Matrícula</h6>

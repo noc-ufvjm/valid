@@ -63,3 +63,13 @@ div#processamento p {
     margin-left: 320px;
     margin-top: 150px;
 }
+
+img {
+    height: 25px;
+    width: 25px; 
+    margin-right: 5px;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
+    border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+}

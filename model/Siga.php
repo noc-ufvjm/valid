@@ -28,6 +28,7 @@ class Siga {
         }
     }
 
+    //Verifica se o usuário existe
     public function userExists($cpf) {
         //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
         $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
@@ -47,6 +48,58 @@ class Siga {
             return false;
     }
 
+    //Verifica se o usuário é um estudante
+    public function getStudentConfirmation($cpf) {
+        //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
+        $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
+
+        //Realiza conexão ao banco de dados do SIGA
+        $this->conectar();
+
+        //Pega o ID da pessoa
+        $result = pg_exec($this->sigaconn, "select idpessoa from cm_pessoa where cpf = '$cpf'");
+        $array = pg_fetch_all($result);
+        $idpessoa = $array[0]["idpessoa"];
+
+        //Pega os ids de cada vínculo que a pessoa tem
+        $result = pg_exec($this->sigaconn, "select idusuario from cm_usuario where idpessoa = $idpessoa");
+        $array = pg_fetch_all($result);
+        for ($a = 0; $a < sizeof($array); $a++) {
+            $Iduser = $array[$a]["idusuario"] . " ";
+            $result = pg_exec($this->sigaconn, "select * from cm_grpusuario where idusuario = $Iduser");
+            $array2 = pg_fetch_all($result);
+            
+            //Aluno possui id 40 = Aluno
+            if($array2[0]["idgrupo"] == "40")
+                return 5;
+        };
+        
+        //Não é aluno
+        return 0;
+    }
+    
+    //Verifica se o usuário é um TA ou um Professor
+    public function getTAProfConfirmation($cpf) {
+        //Filtra digitos do CPF digitado - Removendo caracteres especiais, espaços, etc.
+        $cpf = str_replace(" ", "", preg_replace("/[^0-9\s]/", "", $cpf));
+
+        //Realiza conexão ao banco de dados do SIGA
+        $this->conectar();
+
+        //Pega o ID da pessoa
+        $result = pg_exec($this->sigaconn, "SELECT f.* FROM rh.funcionario as f join cm_pessoa as p on f.idpessoa = p.idpessoa WHERE p.cpf = '$cpf' AND f.situacao != 'APOSENTADO'");
+        $array = pg_fetch_all($result);
+        
+        //TA
+        if($array[0]["categoria"] == "TA")
+            return 1;
+        //Aluno
+        else if($array[0]["categoria"] == "")
+            return 0;
+        //Professor
+        else return 2;
+    }
+    
     //Vericifica se existe determinado CPF e senha no SIGA
     public function autenticacao($cpf, $senha) {
 

@@ -38,6 +38,29 @@ function verificaCampos() {
     }
 }
 
+//Verifica os vínculos do usuário
+function verificaVínculo() {
+    $.get('/valid/app/api/verificarVinculos.php?cpf=' + $('#cpf').val(), function (data) {
+
+        console.log(data);
+
+        if (data === 1) {
+            $("#vinculos").append('<img id="ta" src="imagens/ta.png" title="TA" />');
+        } else if (data === 2) {
+            $("#vinculos").append('<img id="professor" src="imagens/professor.png" title="Professor" />');
+        } else if (data === 6) {
+            $("#vinculos").append('<img id="aluno" src="imagens/aluno.png" title="Aluno" />');
+            $("#vinculos").append('<img id="ta" src="imagens/ta.png" title="TA" />');
+        } else if (data === 7) {
+            $("#vinculos").append('<img id="aluno" src="imagens/aluno.png" title="Aluno" />');
+            $("#vinculos").append('<img id="professor" src="imagens/professor.png" title="Professor" />');
+        } else {
+            $("#vinculos").append('<img id="aluno" src="imagens/aluno.png" title="Aluno" />');
+        }
+
+    });
+}
+
 //Máscara para formatar o telefone no formato específico
 function mascaraTel(o, f) {
     v_obj = o
@@ -140,6 +163,8 @@ function mensagem(texto) {
 
 //Quando a página estiver completamente carregada...
 $(document).ready(function () {
+
+    verificaVínculo();
 
     $('#uid').change(function () {
         verificarLogin();

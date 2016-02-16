@@ -18,16 +18,35 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-3">
-                            <label class="control-label" for="cn">Primeiro Nome</label>
+                            <label class="control-label" for="cn">Nome</label>
                             <input type="text" class="form-control text-center" name="cn" id="cn" value="{$usuario->cn}"/>
                         </div>
-                        <div class="col-xs-5">
+                        <div class="col-xs-4">
                             <label class="control-label" for="sn">Sobrenome</label>
                             <input type="text" class="form-control text-center" name="sn" id="sn" value="{$usuario->sn}"/>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-5">
+                            <label class="control-label" for="uid">Login</label>
+                            <input type="text" class="form-control text-center" name="uid" id="uid" value="" placeholder="nome.sobrenome"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <label for="mail">E-mail Pessoal</label>
+                            <input type="text" class="form-control text-center" name="mail" id="mail" value="{$usuario->mail}"/>
+                        </div>
+                        <div class="col-xs-3">
                             <label class="control-label" for="employeeNumber">Matrícula</label>
                             <input type="text" class="form-control text-center" name="employeeNumber" id="employeeNumber" value="{$usuario->employeenumber}" disabled/>
+                        </div>
+                        <div class="col-xs-4">
+                            <label class="control-label" for="cpf">CPF</label>
+                            <input type="text" class="form-control text-center" name="cpf" id="cpf" value="{$usuario->brPersonCPF}" disabled/>
                         </div>
                     </div>
                 </div>
@@ -40,28 +59,18 @@
                             <label class="control-label" for="givenName">Apelido</label>
                             <input type="text" class="form-control text-center" name="givenName" id="givenName" value="{$usuario->givenName}"/>
                         </div>
-                        <div class="col-xs-4">
-                            <label class="control-label" for="uid">Login</label>
-                            <input type="text" class="form-control text-center" name="uid" id="uid" value="" placeholder="nome.sobrenome"/>
-                        </div>
-                        <div class="col-xs-5">
-                            <label for="mail">E-mail Pessoal</label>
-                            <input type="text" class="form-control text-center" name="mail" id="mail" value="{$usuario->mail}"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-3">
                             <label class="control-label" for="telephoneNumber">Telefone</label>
                             <input type="text" class="form-control text-center" name="telephoneNumber" id="telephoneNumber" value="{$usuario->telefones[0]}" placeholder="Área + Número" />
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-3">
                             <label class="control-label" for="cellphoneNumber">Celular</label>
                             <input type="text" class="form-control text-center" name="cellphoneNumber" id="cellphoneNumber" value="{$usuario->telefones[1]}" placeholder="Área + 9 + Número"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <label class="control-label">Vínculo(s)</label>
+                            <div id="vinculos">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,11 +80,11 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-3">
                             <label class="control-label" for="userPassword">Senha</label>
                             <input type="password" class="form-control text-center" name="userPassword" id="userPassword"/>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-3">
                             <label class="control-label" for="confirmar_senha">Confirmar Senha</label>
                             <input type="password" class="form-control text-center" name="confirmar_senha" id="confirmar_senha"/>
                         </div>
